@@ -1,0 +1,40 @@
+services:
+  bdd:
+    container_name: bdd-ape
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  client:
+    container_name: client-ape
+    image: node:18.10-alpine3.15
+    working_dir: /app
+    environment:
+      - PORT=3000
+      - VITE_API_URL=http://localhost:3000
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/app
+    command:
+      - sh
+      - -c
+      - "yarn install && yarn dev"
+  server:
+    container_name: server-api
+    build:
+      context: .
+      dockerfile: ./docker/server/dev.Dockerfile
+    working_dir: /app
+    environment:
+      - ALLOW_ORIGINS=*
+      - PORT=3001
+    ports:
+      - 3001:3001
+    volumes:
+      - ./server:/app
+    command: go get . && air
