@@ -22,17 +22,23 @@ const (
 
 type User struct {
 	gorm.Model
-	Email    string
-	Pseudo   string
-	Name     string
-	Surname  string
-	Password string
-	Role     Role
+	Email      string
+	Pseudo     string
+	Picture    string
+	Name       string
+	Surname    string
+	Password   string
+	Role       Role
+	Tokens     []Token
+	MyChannels []Channel `gorm:"foreignKey:Owner;"`
+	Channels   []ChannelUser
+	// Add push notification body
 }
 
 type Token struct {
 	gorm.Model
-	Token string
+	UserID uint
+	Token  string
 }
 
 type JwtCustomClaims struct {

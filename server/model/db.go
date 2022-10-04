@@ -14,9 +14,16 @@ const (
 	Disabled SSL = "disable"
 )
 
+// https://gorm.io/docs/index.html
 func InitDb(host, user, password, dbname, port string, ssl SSL) *gorm.DB {
+	db := ConnectDb(host, user, password, dbname, port, ssl)
 
-	return ConnectDb(host, user, password, dbname, port, ssl)
+	db.AutoMigrate(&User{})
+	db.AutoMigrate(&Token{})
+	db.AutoMigrate(&Channel{})
+	db.AutoMigrate(&ChannelUser{})
+	db.AutoMigrate(&Message{})
+	return db
 }
 
 func ConnectDb(host, user, password, dbname, port string, ssl SSL) *gorm.DB {
