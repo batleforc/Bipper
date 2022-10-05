@@ -1,7 +1,6 @@
 package model
 
 import (
-	"github.com/golang-jwt/jwt"
 	"gorm.io/gorm"
 )
 
@@ -11,13 +10,6 @@ const (
 	Admin  Role = "Admin"
 	Modo   Role = "Modo"
 	Member Role = "Member"
-)
-
-type TypeToken string
-
-const (
-	AccessToken TypeToken = "AccessToken"
-	RenewToken  TypeToken = "RenewToken"
 )
 
 type User struct {
@@ -35,15 +27,39 @@ type User struct {
 	// Add push notification body
 }
 
-type Token struct {
-	gorm.Model
-	UserID uint
-	Token  string
+func (u *User) IsAdmin() bool {
+	return u.Role == Admin
 }
 
-type JwtCustomClaims struct {
-	Pseudo    string `json:"pseudo"`
-	Role      string `json:"role"`
-	TokenType TypeToken
-	jwt.StandardClaims
+func (u *User) IsModo() bool {
+	return u.Role == Modo
+}
+
+func (u *User) IsMember() bool {
+	return u.Role == Member
+}
+
+// Get One User
+func (u *User) GetUser(db *gorm.DB, id uint) error {
+	err := db.Model(&User{}).Preload("Tokens").Preload("Channels").Preload("MyChannels").First(u, id).Error
+	return err
+}
+
+// Get All Users
+func (u *User) GetUsers(db *gorm.DB) (*[]User, error) {
+	var users []User
+	err := db.Model(&User{}).Preload("Tokens").Preload("Channels").Preload("MyChannels").Find(&users).Error
+	return &users, err
+}
+
+// Delete one User
+func (u *User) DeleteUser(db *gorm.DB, id uint) error {
+	err := db.Delete(u, id).Error
+	return err
+}
+
+// Update or create one user
+func (u *User) UpdateOrCreateUser(db *gorm.DB, id uint) error {
+	err := db.Save(u).Error
+	return err
 }
