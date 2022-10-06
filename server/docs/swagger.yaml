@@ -1,4 +1,23 @@
 basePath: /api
+definitions:
+  route.LoginBody:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  route.LoginReturn:
+    properties:
+      access_token:
+        type: string
+      pseudo:
+        type: string
+      renew_token:
+        type: string
+      role:
+        type: string
+    type: object
 info:
   contact:
     email: maxleriche.60@gmail.com
@@ -7,5 +26,25 @@ info:
   description: Bipper api
   title: Bipper Api
   version: "1.0"
-paths: {}
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: Login body
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/route.LoginBody'
+      responses:
+        "200":
+          description: Login return
+          schema:
+            $ref: '#/definitions/route.LoginReturn'
+      summary: Login user
+      tags:
+      - Auth
 swagger: "2.0"

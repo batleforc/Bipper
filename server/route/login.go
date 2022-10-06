@@ -3,11 +3,9 @@ package route
 import (
 	"batleforc/bipper/model"
 	"net/http"
-	"os"
-	"time"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type LoginBody struct {
@@ -22,46 +20,55 @@ type LoginReturn struct {
 	RenewToken  string     `json:"renew_token"`
 }
 
+// Login user
+// @Summary Login user
+// @Description Login user
+// @Tags Auth
+// @Accept  json
+// @Param Request body route.LoginBody true "Login body"
+// @Success 200 {object} route.LoginReturn "Login return"
+// @Router /login [post]
 func Login(c echo.Context) error {
 	boudy := new(LoginBody)
 	if err := c.Bind(boudy); err != nil {
 		return echo.ErrUnauthorized
 	}
-	// TODO : Fetch user and validate password
-	// https://echo.labstack.com/cookbook/jwt/
 
-	AccessTokenClaim := &model.JwtCustomClaims{
-		Pseudo:    "Joseph joestar",
-		Role:      string(model.Member),
-		TokenType: model.AccessToken,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 8).Unix(),
-		},
+	user := new(model.User)
+	if err := user.GetUserByMail(c.Get("db").(*gorm.DB), boudy.Email); err != nil {
+		return c.String(http.StatusUnauthorized, "Email or password incorrect")
 	}
-	RenewTokenClaim := &model.JwtCustomClaims{
-		Pseudo:    "Joseph joestar",
-		Role:      string(model.Member),
-		TokenType: model.RenewToken,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 24 * 7).Unix(),
-		},
-	}
-	AccessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, AccessTokenClaim)
-	RenewToken := jwt.NewWithClaims(jwt.SigningMethodHS256, RenewTokenClaim)
-	signedAccess, err := AccessToken.SignedString([]byte(os.Getenv("TOKEN_SIGN")))
-	if err != nil {
-		return err
-	}
-	signedRenew, err := RenewToken.SignedString([]byte(os.Getenv("TOKEN_SIGN_RENEW")))
-	if err != nil {
-		return err
+	if !user.CheckPassword(boudy.Password) {
+		return c.String(http.StatusUnauthorized, "Password incorrect")
 	}
 
-	// todo : Insert renew in db and delete oldest if more than two
+	AccesTokenClaim := new(model.JwtCustomClaims)
+	RefreshTokenClaim := new(model.JwtCustomClaims)
+
+	AccesTokenClaim.CreateCustomClaims(user.Pseudo, string(user.Role), model.AccessToken)
+	RefreshTokenClaim.CreateCustomClaims(user.Pseudo, string(user.Role), model.RenewToken)
+
+	accessToken, err := AccesTokenClaim.CreateToken()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Error while creating token")
+	}
+	renewToken, err := RefreshTokenClaim.CreateToken()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Error while creating token")
+	}
+	token := new(model.Token)
+	tokens, err := token.GetAllToken(c.Get("db").(*gorm.DB), user.ID)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Error while creating token")
+	}
+	if len(tokens) <= 4 {
+		token.DeleteToken(c.Get("db").(*gorm.DB), tokens[len(tokens)-1].ID)
+	}
+	token.CreateToken(c.Get("db").(*gorm.DB), user.ID, renewToken)
 	return c.JSON(http.StatusOK, LoginReturn{
 		Pseudo:      "JosephJoestar",
 		Role:        model.Member,
-		AccessToken: signedAccess,
-		RenewToken:  signedRenew,
+		AccessToken: accessToken,
+		RenewToken:  renewToken,
 	})
 }
