@@ -84,6 +84,36 @@ func (t *Token) DeleteToken(db *gorm.DB, id uint) error {
 	return db.Where("user_id = ?", id).Delete(t).Error
 }
 
+func validateToken(token *jwt.Token) (*JwtCustomClaims, error) {
+	if token.Method.Alg() != "HS256" {
+		return nil, fmt.Errorf("invalid token")
+	}
+	if time.Until(time.Unix(token.Claims.(*JwtCustomClaims).ExpiresAt, 0)) <= 0 {
+		return nil, fmt.Errorf("token expired")
+	}
+	if claims, ok := token.Claims.(*JwtCustomClaims); ok && token.Valid {
+		return claims, nil
+	}
+	return nil, fmt.Errorf("invalid token")
+}
+
+func (t *Token) ValidateAccessToken(token string) (*JwtCustomClaims, error) {
+	parsedToken, err := jwt.ParseWithClaims(token, &JwtCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("TOKEN_SIGN")), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	claim, err := validateToken(parsedToken)
+	if err != nil {
+		return claim, err
+	}
+	if claim.TokenType == AccessToken {
+		return claim, nil
+	}
+	return nil, fmt.Errorf("invalid token")
+}
+
 // Validate token
 func (t *Token) ValidateRenewToken(token string) (*JwtCustomClaims, error) {
 	parsedToken, err := jwt.ParseWithClaims(token, &JwtCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
@@ -92,16 +122,12 @@ func (t *Token) ValidateRenewToken(token string) (*JwtCustomClaims, error) {
 	if err != nil {
 		return nil, err
 	}
-	if parsedToken.Method.Alg() != "HS256" {
-		return nil, fmt.Errorf("invalid token")
+	claim, err := validateToken(parsedToken)
+	if err != nil {
+		return claim, err
 	}
-	if time.Until(time.Unix(parsedToken.Claims.(*JwtCustomClaims).ExpiresAt, 0)) <= 0 {
-		return nil, fmt.Errorf("token expired")
-	}
-	if claims, ok := parsedToken.Claims.(*JwtCustomClaims); ok && parsedToken.Valid {
-		if claims.TokenType == RenewToken {
-			return claims, nil
-		}
+	if claim.TokenType == RenewToken {
+		return claim, nil
 	}
 	return nil, fmt.Errorf("invalid token")
 }
