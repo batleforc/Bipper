@@ -23,6 +23,20 @@ definitions:
       renew_token:
         type: string
     type: object
+  route.RenewTokenBody:
+    properties:
+      renew_token:
+        type: string
+    type: object
+  route.RenewTokenReturn:
+    properties:
+      access_token:
+        type: string
+      pseudo:
+        type: string
+      role:
+        type: string
+    type: object
 info:
   contact:
     email: maxleriche.60@gmail.com
@@ -66,6 +80,26 @@ paths:
           $ref: '#/definitions/route.LogoutBody'
       responses: {}
       summary: Logout user
+      tags:
+      - Auth
+  /renewtoken:
+    post:
+      consumes:
+      - application/json
+      description: Renew Token via refresh token
+      parameters:
+      - description: Renew body
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/route.RenewTokenBody'
+      responses:
+        "200":
+          description: Renew return
+          schema:
+            $ref: '#/definitions/route.RenewTokenReturn'
+      summary: Renew Token
       tags:
       - Auth
 swagger: "2.0"

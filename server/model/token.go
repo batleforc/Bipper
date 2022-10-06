@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -81,4 +82,26 @@ func (t *Token) CreateToken(db *gorm.DB, id uint, token string) error {
 // Delete Token
 func (t *Token) DeleteToken(db *gorm.DB, id uint) error {
 	return db.Where("user_id = ?", id).Delete(t).Error
+}
+
+// Validate token
+func (t *Token) ValidateRenewToken(token string) (*JwtCustomClaims, error) {
+	parsedToken, err := jwt.ParseWithClaims(token, &JwtCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("TOKEN_SIGN_RENEW")), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if parsedToken.Method.Alg() != "HS256" {
+		return nil, fmt.Errorf("invalid token")
+	}
+	if time.Until(time.Unix(parsedToken.Claims.(*JwtCustomClaims).ExpiresAt, 0)) <= 0 {
+		return nil, fmt.Errorf("token expired")
+	}
+	if claims, ok := parsedToken.Claims.(*JwtCustomClaims); ok && parsedToken.Valid {
+		if claims.TokenType == RenewToken {
+			return claims, nil
+		}
+	}
+	return nil, fmt.Errorf("invalid token")
 }

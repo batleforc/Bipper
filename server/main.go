@@ -57,6 +57,7 @@ func main() {
 	auth := api.Group("/auth")
 	auth.POST("/login", route.Login)
 	auth.POST("/logout", route.Logout)
+	auth.POST("/renewtoken", route.RenewToken)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }

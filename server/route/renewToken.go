@@ -3,11 +3,9 @@ package route
 import (
 	"batleforc/bipper/model"
 	"net/http"
-	"os"
-	"time"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type RenewTokenBody struct {
@@ -20,29 +18,36 @@ type RenewTokenReturn struct {
 	AccessToken string     `json:"access_token"`
 }
 
+// Renew Token
+// @Summary Renew Token
+// @Description Renew Token via refresh token
+// @Tags Auth
+// @Accept  json
+// @Param Request body route.RenewTokenBody true "Renew body"
+// @Success 200 {object} route.RenewTokenReturn "Renew return"
+// @Router /renewtoken [post]
 func RenewToken(c echo.Context) error {
 	boudy := new(RenewTokenBody)
 	if err := c.Bind(boudy); err != nil {
 		return echo.ErrUnauthorized
 	}
-	// TODO : Check renew token in db and return new access token if renew not outdated and not deleted
-
-	AccessTokenClaim := &model.JwtCustomClaims{
-		Pseudo:    "Joseph joestar",
-		Role:      string(model.Member),
-		TokenType: model.AccessToken,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 8).Unix(),
-		},
-	}
-	AccessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, AccessTokenClaim)
-	signedAccess, err := AccessToken.SignedString([]byte(os.Getenv("TOKEN_SIGN")))
+	token := new(model.Token)
+	err := token.GetOneTokenByToken(c.Get("db").(*gorm.DB), boudy.RenewToken)
 	if err != nil {
-		return err
+		return c.String(http.StatusUnauthorized, "Token incorrect")
+	}
+	claims, err := token.ValidateRenewToken(boudy.RenewToken)
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
+	}
+	claims.TokenType = model.AccessToken
+	signedToken, err := claims.CreateToken()
+	if err != nil {
+		return c.String(http.StatusUnauthorized, err.Error())
 	}
 	return c.JSON(http.StatusOK, RenewTokenReturn{
-		Pseudo:      "JosephJoestar",
-		Role:        model.Member,
-		AccessToken: signedAccess,
+		Pseudo:      claims.Pseudo,
+		Role:        model.Role(claims.Role),
+		AccessToken: signedToken,
 	})
 }

@@ -74,6 +74,37 @@ const docTemplate = `{
                 ],
                 "responses": {}
             }
+        },
+        "/renewtoken": {
+            "post": {
+                "description": "Renew Token via refresh token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Renew Token",
+                "parameters": [
+                    {
+                        "description": "Renew body",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/route.RenewTokenBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Renew return",
+                        "schema": {
+                            "$ref": "#/definitions/route.RenewTokenReturn"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -109,6 +140,28 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "renew_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "route.RenewTokenBody": {
+            "type": "object",
+            "properties": {
+                "renew_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "route.RenewTokenReturn": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "pseudo": {
+                    "type": "string"
+                },
+                "role": {
                     "type": "string"
                 }
             }
