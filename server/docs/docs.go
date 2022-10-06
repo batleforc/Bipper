@@ -50,6 +50,30 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/logout": {
+            "post": {
+                "description": "Logout user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout user",
+                "parameters": [
+                    {
+                        "description": "Logout body",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/route.LogoutBody"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
         }
     },
     "definitions": {
@@ -77,6 +101,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "route.LogoutBody": {
+            "type": "object",
+            "properties": {
+                "renew_token": {
                     "type": "string"
                 }
             }

@@ -18,6 +18,11 @@ definitions:
       role:
         type: string
     type: object
+  route.LogoutBody:
+    properties:
+      renew_token:
+        type: string
+    type: object
 info:
   contact:
     email: maxleriche.60@gmail.com
@@ -45,6 +50,22 @@ paths:
           schema:
             $ref: '#/definitions/route.LoginReturn'
       summary: Login user
+      tags:
+      - Auth
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout user
+      parameters:
+      - description: Logout body
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/route.LogoutBody'
+      responses: {}
+      summary: Logout user
       tags:
       - Auth
 swagger: "2.0"
