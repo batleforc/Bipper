@@ -61,6 +61,12 @@ func (u *User) GetUser(db *gorm.DB, id uint) error {
 	return err
 }
 
+// Get One User By Mail
+func (u *User) GetUserByMail(db *gorm.DB, mail string) error {
+	err := db.Model(&User{}).Preload("Tokens").Preload("Channels").Preload("MyChannels").Where("email = ?", mail).First(u).Error
+	return err
+}
+
 // Get All Users
 func (u *User) GetUsers(db *gorm.DB) (*[]User, error) {
 	var users []User
