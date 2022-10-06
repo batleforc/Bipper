@@ -37,4 +37,4 @@ services:
       - 3001:3001
     volumes:
       - ./server:/app
-    command: go get . && air
+    command: go get . && swag init && air

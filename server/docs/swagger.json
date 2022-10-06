@@ -1,0 +1,15 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Bipper api",
+        "title": "Bipper Api",
+        "contact": {
+            "name": "Batleforc",
+            "url": "https://weebo.fr",
+            "email": "maxleriche.60@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api",
+    "paths": {}
+}

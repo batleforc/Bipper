@@ -1,0 +1,11 @@
+basePath: /api
+info:
+  contact:
+    email: maxleriche.60@gmail.com
+    name: Batleforc
+    url: https://weebo.fr
+  description: Bipper api
+  title: Bipper Api
+  version: "1.0"
+paths: {}
+swagger: "2.0"
