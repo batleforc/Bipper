@@ -1,6 +1,11 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"log"
+
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
+)
 
 type Channel struct {
 	gorm.Model
@@ -15,8 +20,20 @@ type Channel struct {
 }
 
 // Generate a new passkey for a channel
-func (c *Channel) GeneratePassKey() {
-	c.PassKey = RandomString(5)
+func (c *Channel) GeneratePassKey() string {
+	pass := RandomString(5)
+	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
+	if err != nil {
+		log.Println(err)
+	}
+	c.PassKey = string(hash)
+	return pass
+}
+
+// Check if the passkey is correct
+func (c *Channel) CheckPassKey(pass string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(c.PassKey), []byte(pass))
+	return err == nil
 }
 
 // Get One Channel
