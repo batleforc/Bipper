@@ -11,7 +11,7 @@ import (
 // Get user
 // @Summary Get user
 // @Description Get user
-// @Tags Auth
+// @Tags User
 // @Security BearerAuth
 // @Success 200 {object} model.User "user return"
 // @Router /user [get]

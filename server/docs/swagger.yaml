@@ -267,7 +267,7 @@ paths:
       - BearerAuth: []
       summary: Get user
       tags:
-      - Auth
+      - User
 securityDefinitions:
   BearerAuth:
     in: header

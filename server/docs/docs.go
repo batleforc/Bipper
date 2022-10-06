@@ -146,7 +146,7 @@ const docTemplate = `{
                 ],
                 "description": "Get user",
                 "tags": [
-                    "Auth"
+                    "User"
                 ],
                 "summary": "Get user",
                 "responses": {
