@@ -12,6 +12,7 @@ import (
 // @Summary Get user
 // @Description Get user
 // @Tags Auth
+// @Security BearerAuth
 // @Success 200 {object} model.User "user return"
 // @Router /user [get]
 func GetUser(c echo.Context) error {

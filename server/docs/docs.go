@@ -77,7 +77,7 @@ const docTemplate = `{
         },
         "/auth/register": {
             "post": {
-                "description": "Register User",
+                "description": "Register User, Email has to be Unique and valid, Pseudo has to be Unique and \u003e 3 characters, Password has to be \u003e 8 characters, Name and surname has to be \u003e 2 characters",
                 "consumes": [
                     "application/json"
                 ],
@@ -139,6 +139,11 @@ const docTemplate = `{
         },
         "/user": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get user",
                 "tags": [
                     "Auth"
@@ -274,29 +279,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Token": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "userID": {
-                    "type": "integer"
-                }
-            }
-        },
         "model.User": {
             "type": "object",
             "properties": {
@@ -327,9 +309,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
-                },
                 "picture": {
                     "type": "string"
                 },
@@ -341,12 +320,6 @@ const docTemplate = `{
                 },
                 "surname": {
                     "type": "string"
-                },
-                "tokens": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Token"
-                    }
                 },
                 "updatedAt": {
                     "type": "string"
@@ -444,6 +417,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

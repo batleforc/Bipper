@@ -69,7 +69,7 @@
         },
         "/auth/register": {
             "post": {
-                "description": "Register User",
+                "description": "Register User, Email has to be Unique and valid, Pseudo has to be Unique and \u003e 3 characters, Password has to be \u003e 8 characters, Name and surname has to be \u003e 2 characters",
                 "consumes": [
                     "application/json"
                 ],
@@ -131,6 +131,11 @@
         },
         "/user": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get user",
                 "tags": [
                     "Auth"
@@ -266,29 +271,6 @@
                 }
             }
         },
-        "model.Token": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "userID": {
-                    "type": "integer"
-                }
-            }
-        },
         "model.User": {
             "type": "object",
             "properties": {
@@ -319,9 +301,6 @@
                 "name": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
-                },
                 "picture": {
                     "type": "string"
                 },
@@ -333,12 +312,6 @@
                 },
                 "surname": {
                     "type": "string"
-                },
-                "tokens": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Token"
-                    }
                 },
                 "updatedAt": {
                     "type": "string"
@@ -436,6 +409,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

@@ -61,7 +61,7 @@ func Login(c echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Error while creating token")
 	}
-	if len(tokens) <= 4 {
+	if len(tokens) >= 4 {
 		token.DeleteToken(c.Get("db").(*gorm.DB), tokens[len(tokens)-1].ID)
 	}
 	token.CreateToken(c.Get("db").(*gorm.DB), user.ID, renewToken)

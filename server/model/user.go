@@ -22,9 +22,9 @@ type User struct {
 	Picture    string
 	Name       string
 	Surname    string
-	Password   string
+	Password   string `json:"-"`
 	Role       Role
-	Tokens     []Token
+	Tokens     []Token   `json:"-"`
 	MyChannels []Channel `gorm:"foreignKey:Owner;"`
 	Channels   []ChannelUser
 	// Add push notification body

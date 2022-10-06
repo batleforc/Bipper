@@ -2,7 +2,9 @@ package route
 
 import (
 	"batleforc/bipper/model"
+	"errors"
 	"net/http"
+	"net/mail"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -24,7 +26,7 @@ type RegisterReturn struct {
 
 // Register User
 // @Summary Register User
-// @Description Register User
+// @Description Register User, Email has to be Unique and valid, Pseudo has to be Unique and > 3 characters, Password has to be > 8 characters, Name and surname has to be > 2 characters
 // @Tags Auth
 // @Accept  json
 // @Param Request body route.RegisterBody true "Register body"
@@ -39,7 +41,8 @@ func Register(c echo.Context) error {
 			Message:    "Body is not valid",
 		})
 	}
-	if body.Email != "" && body.Pseudo != "" && body.Name != "" && body.Surname != "" && body.Password != "" {
+	_, err := mail.ParseAddress(body.Email)
+	if body.Email == "" || body.Pseudo == "" || body.Name == "" || body.Surname == "" || body.Password == "" || err != nil || len(body.Pseudo) < 3 || len(body.Name) < 2 || len(body.Surname) < 2 || len(body.Password) < 8 {
 		return c.JSON(http.StatusBadRequest, RegisterReturn{
 			Registered: false,
 			Error:      true,
@@ -48,7 +51,7 @@ func Register(c echo.Context) error {
 	}
 
 	user := new(model.User)
-	if err := user.GetUserByMail(c.Get("db").(*gorm.DB), body.Email); err != nil || user.ID != 0 {
+	if err := user.GetUserByMail(c.Get("db").(*gorm.DB), body.Email); err != nil && !errors.Is(err, gorm.ErrRecordNotFound) || user.ID != 0 {
 		return c.JSON(http.StatusBadRequest, RegisterReturn{
 			Registered: false,
 			Error:      true,
@@ -56,7 +59,7 @@ func Register(c echo.Context) error {
 		})
 	}
 	user = new(model.User)
-	if err := user.GetUserByPseudo(c.Get("db").(*gorm.DB), body.Pseudo); err != nil || user.ID != 0 {
+	if err := user.GetUserByPseudo(c.Get("db").(*gorm.DB), body.Pseudo); err != nil && !errors.Is(err, gorm.ErrRecordNotFound) || user.ID != 0 {
 		return c.JSON(http.StatusBadRequest, RegisterReturn{
 			Registered: false,
 			Error:      true,
@@ -70,7 +73,7 @@ func Register(c echo.Context) error {
 	user.Role = model.Member
 	user.Picture = ""
 	user.HashPassword(body.Password)
-	err := user.UpdateOrCreateUser(c.Get("db").(*gorm.DB))
+	err = user.UpdateOrCreateUser(c.Get("db").(*gorm.DB))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, RegisterReturn{
 			Registered: false,

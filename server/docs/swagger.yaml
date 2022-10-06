@@ -78,21 +78,6 @@ definitions:
       userID:
         type: integer
     type: object
-  model.Token:
-    properties:
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
-      id:
-        type: integer
-      token:
-        type: string
-      updatedAt:
-        type: string
-      userID:
-        type: integer
-    type: object
   model.User:
     properties:
       channels:
@@ -113,8 +98,6 @@ definitions:
         type: array
       name:
         type: string
-      password:
-        type: string
       picture:
         type: string
       pseudo:
@@ -123,10 +106,6 @@ definitions:
         type: string
       surname:
         type: string
-      tokens:
-        items:
-          $ref: '#/definitions/model.Token'
-        type: array
       updatedAt:
         type: string
     type: object
@@ -238,7 +217,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: Register User
+      description: Register User, Email has to be Unique and valid, Pseudo has to
+        be Unique and > 3 characters, Password has to be > 8 characters, Name and
+        surname has to be > 2 characters
       parameters:
       - description: Register body
         in: body
@@ -282,7 +263,14 @@ paths:
           description: user return
           schema:
             $ref: '#/definitions/model.User'
+      security:
+      - BearerAuth: []
       summary: Get user
       tags:
       - Auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
