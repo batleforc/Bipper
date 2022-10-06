@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -15,9 +16,7 @@ const (
 )
 
 // https://gorm.io/docs/index.html
-func InitDb(host, user, password, dbname, port string, ssl SSL) *gorm.DB {
-	db := ConnectDb(host, user, password, dbname, port, ssl)
-
+func InitDb(db *gorm.DB) *gorm.DB {
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Token{})
 	db.AutoMigrate(&Channel{})
@@ -31,6 +30,9 @@ func ConnectDb(host, user, password, dbname, port string, ssl SSL) *gorm.DB {
 	if err != nil {
 		panic("Failed to connect database")
 	}
-
 	return db
+}
+
+func ConnectDbFromEnv() *gorm.DB {
+	return ConnectDb(os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"), os.Getenv("DB_PORT"), SSL(os.Getenv("DB_SSL")))
 }
