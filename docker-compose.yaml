@@ -38,3 +38,12 @@ services:
     volumes:
       - ./server:/app
     command: go get . && swag init && air
+  server-gen-swagger:
+    container_name: server-api-swagger
+    build:
+      context: .
+      dockerfile: ./docker/server/dev.Dockerfile
+    working_dir: /app
+    volumes:
+      - ./server:/app
+    command: swag init --parseDependency --parseInternal
