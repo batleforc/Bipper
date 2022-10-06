@@ -27,7 +27,7 @@ type LoginReturn struct {
 // @Accept  json
 // @Param Request body route.LoginBody true "Login body"
 // @Success 200 {object} route.LoginReturn "Login return"
-// @Router /login [post]
+// @Router /auth/login [post]
 func Login(c echo.Context) error {
 	boudy := new(LoginBody)
 	if err := c.Bind(boudy); err != nil {

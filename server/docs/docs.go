@@ -20,7 +20,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/login": {
+        "/auth/login": {
             "post": {
                 "description": "Login user",
                 "consumes": [
@@ -51,7 +51,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/logout": {
+        "/auth/logout": {
             "post": {
                 "description": "Logout user",
                 "consumes": [
@@ -75,7 +75,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/register": {
+        "/auth/register": {
             "post": {
                 "description": "Register User",
                 "consumes": [
@@ -106,7 +106,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/renewtoken": {
+        "/auth/renew": {
             "post": {
                 "description": "Renew Token via refresh token",
                 "consumes": [
@@ -136,9 +136,223 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user": {
+            "get": {
+                "description": "Get user",
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get user",
+                "responses": {
+                    "200": {
+                        "description": "user return",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Channel": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Message"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner": {
+                    "type": "integer"
+                },
+                "passKey": {
+                    "description": "crypted field (can be regenerated) and empty if public",
+                    "type": "string"
+                },
+                "picture": {
+                    "type": "string"
+                },
+                "private": {
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ChannelUser"
+                    }
+                }
+            }
+        },
+        "model.ChannelUser": {
+            "type": "object",
+            "properties": {
+                "canMod": {
+                    "type": "boolean"
+                },
+                "canRead": {
+                    "type": "boolean"
+                },
+                "canSend": {
+                    "type": "boolean"
+                },
+                "channelID": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Message": {
+            "type": "object",
+            "properties": {
+                "channelID": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Token": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.User": {
+            "type": "object",
+            "properties": {
+                "channels": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ChannelUser"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "myChannels": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Channel"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "picture": {
+                    "type": "string"
+                },
+                "pseudo": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "tokens": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Token"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "route.LoginBody": {
             "type": "object",
             "properties": {

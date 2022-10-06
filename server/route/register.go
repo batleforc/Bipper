@@ -29,7 +29,7 @@ type RegisterReturn struct {
 // @Accept  json
 // @Param Request body route.RegisterBody true "Register body"
 // @Success 200 {object} route.RegisterReturn "Register return"
-// @Router /register [post]
+// @Router /auth/register [post]
 func Register(c echo.Context) error {
 	body := new(RegisterBody)
 	if err := c.Bind(body); err != nil {

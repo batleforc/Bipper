@@ -18,7 +18,7 @@ type LogoutBody struct {
 // @Tags Auth
 // @Accept  json
 // @Param Request body route.LogoutBody true "Logout body"
-// @Router /logout [post]
+// @Router /auth/logout [post]
 func Logout(c echo.Context) error {
 	boudy := new(LogoutBody)
 	if err := c.Bind(boudy); err != nil {

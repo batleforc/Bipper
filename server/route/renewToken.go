@@ -25,7 +25,7 @@ type RenewTokenReturn struct {
 // @Accept  json
 // @Param Request body route.RenewTokenBody true "Renew body"
 // @Success 200 {object} route.RenewTokenReturn "Renew return"
-// @Router /renewtoken [post]
+// @Router /auth/renew [post]
 func RenewToken(c echo.Context) error {
 	boudy := new(RenewTokenBody)
 	if err := c.Bind(boudy); err != nil {

@@ -53,11 +53,12 @@ func main() {
 	api.GET("/", func(c echo.Context) error {
 		return c.String(200, "Hey I'm Bipper")
 	})
+	api.GET("/user", route.GetUser)
 
 	auth := api.Group("/auth")
 	auth.POST("/login", route.Login)
 	auth.POST("/logout", route.Logout)
-	auth.POST("/renewtoken", route.RenewToken)
+	auth.POST("/renew", route.RenewToken)
 	auth.POST("/register", route.Register)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))

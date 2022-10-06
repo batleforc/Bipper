@@ -1,5 +1,135 @@
 basePath: /api
 definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  model.Channel:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      messages:
+        items:
+          $ref: '#/definitions/model.Message'
+        type: array
+      name:
+        type: string
+      owner:
+        type: integer
+      passKey:
+        description: crypted field (can be regenerated) and empty if public
+        type: string
+      picture:
+        type: string
+      private:
+        type: boolean
+      updatedAt:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/model.ChannelUser'
+        type: array
+    type: object
+  model.ChannelUser:
+    properties:
+      canMod:
+        type: boolean
+      canRead:
+        type: boolean
+      canSend:
+        type: boolean
+      channelID:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+    type: object
+  model.Message:
+    properties:
+      channelID:
+        type: integer
+      content:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+    type: object
+  model.Token:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      token:
+        type: string
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+    type: object
+  model.User:
+    properties:
+      channels:
+        items:
+          $ref: '#/definitions/model.ChannelUser'
+        type: array
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      myChannels:
+        items:
+          $ref: '#/definitions/model.Channel'
+        type: array
+      name:
+        type: string
+      password:
+        type: string
+      picture:
+        type: string
+      pseudo:
+        type: string
+      role:
+        type: string
+      surname:
+        type: string
+      tokens:
+        items:
+          $ref: '#/definitions/model.Token'
+        type: array
+      updatedAt:
+        type: string
+    type: object
   route.LoginBody:
     properties:
       email:
@@ -68,7 +198,7 @@ info:
   title: Bipper Api
   version: "1.0"
 paths:
-  /login:
+  /auth/login:
     post:
       consumes:
       - application/json
@@ -88,7 +218,7 @@ paths:
       summary: Login user
       tags:
       - Auth
-  /logout:
+  /auth/logout:
     post:
       consumes:
       - application/json
@@ -104,7 +234,7 @@ paths:
       summary: Logout user
       tags:
       - Auth
-  /register:
+  /auth/register:
     post:
       consumes:
       - application/json
@@ -124,7 +254,7 @@ paths:
       summary: Register User
       tags:
       - Auth
-  /renewtoken:
+  /auth/renew:
     post:
       consumes:
       - application/json
@@ -142,6 +272,17 @@ paths:
           schema:
             $ref: '#/definitions/route.RenewTokenReturn'
       summary: Renew Token
+      tags:
+      - Auth
+  /user:
+    get:
+      description: Get user
+      responses:
+        "200":
+          description: user return
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: Get user
       tags:
       - Auth
 swagger: "2.0"
