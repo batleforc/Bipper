@@ -61,3 +61,16 @@ func (c *Channel) CreateChannel(db *gorm.DB) error {
 	err := db.Create(c).Error
 	return err
 }
+
+// Update one Channel
+func (c *Channel) UpdateChannel(db *gorm.DB) error {
+	err := db.Save(c).Error
+	return err
+}
+
+// Get paginated channel
+func (c *Channel) GetPaginatedChannel(db *gorm.DB, limit, page int) []Channel {
+	var channels []Channel
+	db.Model(&Channel{}).Preload("Messages").Preload("Users").Offset((page - 1) * limit).Limit(limit).Find(&channels)
+	return channels
+}
