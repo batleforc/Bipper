@@ -24,6 +24,10 @@ import (
 // @contact.url https://weebo.fr
 // @contact.email maxleriche.60@gmail.com
 
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+
 // @BasePath /api
 func main() {
 	err := godotenv.Load()
