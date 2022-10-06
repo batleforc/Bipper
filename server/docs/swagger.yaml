@@ -23,6 +23,28 @@ definitions:
       renew_token:
         type: string
     type: object
+  route.RegisterBody:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      pseudo:
+        type: string
+      surname:
+        type: string
+    type: object
+  route.RegisterReturn:
+    properties:
+      error:
+        type: boolean
+      message:
+        type: string
+      registered:
+        type: boolean
+    type: object
   route.RenewTokenBody:
     properties:
       renew_token:
@@ -80,6 +102,26 @@ paths:
           $ref: '#/definitions/route.LogoutBody'
       responses: {}
       summary: Logout user
+      tags:
+      - Auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register User
+      parameters:
+      - description: Register body
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/route.RegisterBody'
+      responses:
+        "200":
+          description: Register return
+          schema:
+            $ref: '#/definitions/route.RegisterReturn'
+      summary: Register User
       tags:
       - Auth
   /renewtoken:

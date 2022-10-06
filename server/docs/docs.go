@@ -75,6 +75,37 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/register": {
+            "post": {
+                "description": "Register User",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register User",
+                "parameters": [
+                    {
+                        "description": "Register body",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/route.RegisterBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register return",
+                        "schema": {
+                            "$ref": "#/definitions/route.RegisterReturn"
+                        }
+                    }
+                }
+            }
+        },
         "/renewtoken": {
             "post": {
                 "description": "Renew Token via refresh token",
@@ -141,6 +172,40 @@ const docTemplate = `{
             "properties": {
                 "renew_token": {
                     "type": "string"
+                }
+            }
+        },
+        "route.RegisterBody": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "pseudo": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "route.RegisterReturn": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "registered": {
+                    "type": "boolean"
                 }
             }
         },

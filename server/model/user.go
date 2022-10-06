@@ -30,8 +30,8 @@ type User struct {
 	// Add push notification body
 }
 
-func (u *User) HashPassword() {
-	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+func (u *User) HashPassword(pass string) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	if err != nil {
 		log.Println(err)
 	}
@@ -67,6 +67,12 @@ func (u *User) GetUserByMail(db *gorm.DB, mail string) error {
 	return err
 }
 
+// Get One User By Pseudo
+func (u *User) GetUserByPseudo(db *gorm.DB, pseudo string) error {
+	err := db.Model(&User{}).Preload("Tokens").Preload("Channels").Preload("MyChannels").Where("pseudo = ?", pseudo).First(u).Error
+	return err
+}
+
 // Get All Users
 func (u *User) GetUsers(db *gorm.DB) (*[]User, error) {
 	var users []User
@@ -81,7 +87,7 @@ func (u *User) DeleteUser(db *gorm.DB, id uint) error {
 }
 
 // Update or create one user
-func (u *User) UpdateOrCreateUser(db *gorm.DB, id uint) error {
+func (u *User) UpdateOrCreateUser(db *gorm.DB) error {
 	err := db.Save(u).Error
 	return err
 }
