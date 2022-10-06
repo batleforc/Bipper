@@ -74,3 +74,10 @@ func (c *Channel) GetPaginatedChannel(db *gorm.DB, limit, page int) []Channel {
 	db.Model(&Channel{}).Preload("Messages").Preload("Users").Offset((page - 1) * limit).Limit(limit).Find(&channels)
 	return channels
 }
+
+// Get paginated public channel
+func (c *Channel) GetPaginatedPublicChannel(db *gorm.DB, limit, page int) []Channel {
+	var channels []Channel
+	db.Model(&Channel{}).Preload("Messages").Preload("Users").Where("private = ?", false).Offset((page - 1) * limit).Limit(limit).Find(&channels)
+	return channels
+}
