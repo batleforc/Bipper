@@ -1,2 +1,4 @@
 data
 .env
+server/tmp
+server/tmp/*
