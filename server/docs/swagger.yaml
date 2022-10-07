@@ -26,9 +26,6 @@ definitions:
         type: string
       owner:
         type: integer
-      passKey:
-        description: crypted field (can be regenerated) and empty if public
-        type: string
       picture:
         type: string
       private:
@@ -168,6 +165,29 @@ definitions:
       role:
         type: string
     type: object
+  route.SetPictureReturn:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  route.SetUserBody:
+    properties:
+      name:
+        type: string
+      surname:
+        type: string
+    type: object
+  route.SetUserReturn:
+    properties:
+      error:
+        type: boolean
+      message:
+        type: string
+      updated:
+        type: boolean
+    type: object
 info:
   contact:
     email: maxleriche.60@gmail.com
@@ -177,6 +197,23 @@ info:
   title: Bipper Api
   version: "1.0"
 paths:
+  /asset/{fileName}:
+    get:
+      description: Serve static asset
+      parameters:
+      - description: fileName
+        in: path
+        name: fileName
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+      summary: Serve static asset
+      tags:
+      - Asset
   /auth/login:
     post:
       consumes:
@@ -266,6 +303,48 @@ paths:
       security:
       - BearerAuth: []
       summary: Get user
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Set user
+      parameters:
+      - description: Set user body
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/route.SetUserBody'
+      responses:
+        "200":
+          description: Set user return
+          schema:
+            $ref: '#/definitions/route.SetUserReturn'
+      security:
+      - BearerAuth: []
+      summary: Set user
+      tags:
+      - User
+  /user/setpicture:
+    post:
+      consumes:
+      - multipart/form-data
+      description: SetPicture user
+      parameters:
+      - description: .jpeg, .png, .gif
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: SetPicture return
+          schema:
+            $ref: '#/definitions/route.SetPictureReturn'
+      security:
+      - BearerAuth: []
+      summary: SetPicture user
       tags:
       - User
 securityDefinitions:

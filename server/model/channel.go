@@ -13,7 +13,7 @@ type Channel struct {
 	Description string
 	Picture     string
 	Private     bool
-	PassKey     string // crypted field (can be regenerated) and empty if public
+	PassKey     string `json:"-"` // crypted field (can be regenerated) and empty if public
 	Users       []ChannelUser
 	Owner       uint
 	Messages    []Message

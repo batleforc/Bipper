@@ -20,6 +20,32 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/asset/{fileName}": {
+            "get": {
+                "description": "Serve static asset",
+                "tags": [
+                    "Asset"
+                ],
+                "summary": "Serve static asset",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "fileName",
+                        "name": "fileName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "description": "Login user",
@@ -157,6 +183,74 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Set user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Set user",
+                "parameters": [
+                    {
+                        "description": "Set user body",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/route.SetUserBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Set user return",
+                        "schema": {
+                            "$ref": "#/definitions/route.SetUserReturn"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/setpicture": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "SetPicture user",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "SetPicture user",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": ".jpeg, .png, .gif",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "SetPicture return",
+                        "schema": {
+                            "$ref": "#/definitions/route.SetPictureReturn"
+                        }
+                    }
+                }
             }
         }
     },
@@ -199,10 +293,6 @@ const docTemplate = `{
                 },
                 "owner": {
                     "type": "integer"
-                },
-                "passKey": {
-                    "description": "crypted field (can be regenerated) and empty if public",
-                    "type": "string"
                 },
                 "picture": {
                     "type": "string"
@@ -415,6 +505,42 @@ const docTemplate = `{
                 },
                 "role": {
                     "type": "string"
+                }
+            }
+        },
+        "route.SetPictureReturn": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "route.SetUserBody": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "route.SetUserReturn": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "updated": {
+                    "type": "boolean"
                 }
             }
         }

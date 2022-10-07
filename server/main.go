@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	_ "batleforc/bipper/docs"
+	middle "batleforc/bipper/middleware"
 	"batleforc/bipper/model"
 	"batleforc/bipper/route"
 
@@ -36,6 +37,10 @@ func main() {
 	}
 	db := model.ConnectDbFromEnv()
 	model.InitDb(db)
+	defer func() {
+		sqlDB, _ := db.DB()
+		sqlDB.Close()
+	}()
 	e := echo.New()
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "[${remote_ip} : ${time_rfc3339_nano}] ${status} : ${method} => ${uri}\n",
@@ -57,7 +62,13 @@ func main() {
 	api.GET("/", func(c echo.Context) error {
 		return c.String(200, "Hey I'm Bipper")
 	})
-	api.GET("/user", route.GetUser)
+	api.GET("/asset/:file", route.Asset)
+
+	user := api.Group("/user")
+	user.Use(middle.Auth())
+	user.GET("", route.GetUser)
+	user.POST("", route.SetUser)
+	user.POST("/setpicture", route.SetPicture)
 
 	auth := api.Group("/auth")
 	auth.POST("/login", route.Login)
