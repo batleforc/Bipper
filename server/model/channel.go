@@ -49,6 +49,13 @@ func (c *Channel) GetChannels(db *gorm.DB) (*[]Channel, error) {
 	return &channels, err
 }
 
+// Get All public Channels
+func (c *Channel) GetPublicChannels(db *gorm.DB, limit, page int) (*[]Channel, error) {
+	var channels []Channel
+	err := db.Model(&Channel{}).Preload("Users").Preload("Messages").Offset((page-1)*limit).Limit(limit).Where("private = ?", false).Find(&channels).Error
+	return &channels, err
+}
+
 // Delete one Channel
 func (c *Channel) DeleteChannel(db *gorm.DB, id uint) error {
 	err := db.Delete(c, id).Error
