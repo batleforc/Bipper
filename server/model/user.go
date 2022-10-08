@@ -15,6 +15,15 @@ const (
 	Member Role = "Member"
 )
 
+type PublicUser struct {
+	Email   string
+	Pseudo  string
+	Picture string
+	Name    string
+	Surname string
+	Role    Role
+}
+
 type User struct {
 	gorm.Model
 	Email      string
@@ -28,6 +37,17 @@ type User struct {
 	MyChannels []Channel `gorm:"foreignKey:Owner;"`
 	Channels   []ChannelUser
 	// Add push notification body
+}
+
+func (u *User) ToPublicUser() PublicUser {
+	return PublicUser{
+		Email:   u.Email,
+		Pseudo:  u.Pseudo,
+		Picture: u.Picture,
+		Name:    u.Name,
+		Surname: u.Surname,
+		Role:    u.Role,
+	}
 }
 
 func (u *User) HashPassword(pass string) {

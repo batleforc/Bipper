@@ -9,6 +9,16 @@ type ChannelUser struct {
 	CanSend   bool
 	CanRead   bool
 	CanMod    bool
+	User      PublicUser `gorm:"-:all"`
+}
+
+func (cu *ChannelUser) SetPublicUser(db *gorm.DB, id uint) error {
+	user := User{}
+	err := user.GetUser(db, id)
+	if err == nil {
+		cu.User = user.ToPublicUser()
+	}
+	return err
 }
 
 // Get all ChannelUsers in channel
