@@ -80,6 +80,7 @@ func main() {
 	channel.Use(middle.Auth())
 	channel.POST("", route.CreateChan)
 	channel.POST("/name", route.CheckChanName)
+	channel.POST("/:chanId/renew", route.RenewChanPassword)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }

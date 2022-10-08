@@ -259,6 +259,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/chan/{chanId}/renew": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Reset channel password",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Reset channel password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Channel id",
+                        "name": "chanId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reset channel password return",
+                        "schema": {
+                            "$ref": "#/definitions/route.RenewChanPasswordReturn"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "security": [
@@ -660,6 +694,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "registered": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "route.RenewChanPasswordReturn": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "updated": {
                     "type": "boolean"
                 }
             }

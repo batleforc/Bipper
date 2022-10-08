@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"log"
 
 	"golang.org/x/crypto/bcrypt"
@@ -93,4 +94,21 @@ func (c *Channel) GetPaginatedPublicChannel(db *gorm.DB, limit, page int) []Chan
 	var channels []Channel
 	db.Model(&Channel{}).Preload("Messages").Preload("Users").Where("private = ?", false).Offset((page - 1) * limit).Limit(limit).Find(&channels)
 	return channels
+}
+
+// Get Owner
+func (c *Channel) GetOwner(db *gorm.DB) (*User, error) {
+	var user User
+	err := db.Model(&User{}).First(&user, c.Owner).Error
+	return &user, err
+}
+
+// Get User By id
+func (c *Channel) GetUserById(db *gorm.DB, id uint) (*ChannelUser, error) {
+	for _, user := range c.Users {
+		if user.ID == id {
+			return &user, nil
+		}
+	}
+	return nil, fmt.Errorf("User not found")
 }

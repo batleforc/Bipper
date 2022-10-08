@@ -204,6 +204,15 @@ definitions:
       registered:
         type: boolean
     type: object
+  route.RenewChanPasswordReturn:
+    properties:
+      error:
+        type: boolean
+      message:
+        type: string
+      updated:
+        type: boolean
+    type: object
   route.RenewTokenBody:
     properties:
       renew_token:
@@ -373,6 +382,27 @@ paths:
       security:
       - BearerAuth: []
       summary: Create channel
+      tags:
+      - Chan
+  /chan/{chanId}/renew:
+    post:
+      consumes:
+      - application/json
+      description: Reset channel password
+      parameters:
+      - description: Channel id
+        in: path
+        name: chanId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Reset channel password return
+          schema:
+            $ref: '#/definitions/route.RenewChanPasswordReturn'
+      security:
+      - BearerAuth: []
+      summary: Reset channel password
       tags:
       - Chan
   /chan/name:
