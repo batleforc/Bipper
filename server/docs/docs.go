@@ -163,6 +163,102 @@ const docTemplate = `{
                 }
             }
         },
+        "/chan": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create channel, Name has to be unique",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Create channel",
+                "parameters": [
+                    {
+                        "description": "Create channel body",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/route.CreateChanBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create channel return",
+                        "schema": {
+                            "$ref": "#/definitions/route.CreateChanReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Create channel return",
+                        "schema": {
+                            "$ref": "#/definitions/route.CreateChanReturn"
+                        }
+                    },
+                    "500": {
+                        "description": "Create channel return",
+                        "schema": {
+                            "$ref": "#/definitions/route.CreateChanReturn"
+                        }
+                    }
+                }
+            }
+        },
+        "/chan/name": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Check if channel name is available",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Check if channel name is available",
+                "parameters": [
+                    {
+                        "description": "Check channel name body",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/route.CheckChanNameBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Chann available or not",
+                        "schema": {
+                            "$ref": "#/definitions/route.CheckChanNameReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Body not valid",
+                        "schema": {
+                            "$ref": "#/definitions/route.CheckChanNameReturn"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/route.CheckChanNameReturn"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "security": [
@@ -338,6 +434,9 @@ const docTemplate = `{
                 "updatedAt": {
                     "type": "string"
                 },
+                "user": {
+                    "$ref": "#/definitions/model.PublicUser"
+                },
                 "userID": {
                     "type": "integer"
                 }
@@ -366,6 +465,29 @@ const docTemplate = `{
                 },
                 "userID": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.PublicUser": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "picture": {
+                    "type": "string"
+                },
+                "pseudo": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
                 }
             }
         },
@@ -413,6 +535,62 @@ const docTemplate = `{
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "route.CheckChanNameBody": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "route.CheckChanNameReturn": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean"
+                },
+                "error": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "route.CreateChanBody": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "picture": {
+                    "type": "string"
+                },
+                "private": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "route.CreateChanReturn": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "passkey": {
+                    "type": "string"
+                },
+                "updated": {
+                    "type": "boolean"
                 }
             }
         },

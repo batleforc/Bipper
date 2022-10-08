@@ -49,6 +49,12 @@ func (c *Channel) GetChannels(db *gorm.DB) (*[]Channel, error) {
 	return &channels, err
 }
 
+// Get channel by name
+func (c *Channel) GetChannelByName(db *gorm.DB, name string) error {
+	err := db.Model(&Channel{}).Preload("Messages").Preload("Users").Where("name = ?", name).First(c).Error
+	return err
+}
+
 // Get All public Channels
 func (c *Channel) GetPublicChannels(db *gorm.DB, limit, page int) (*[]Channel, error) {
 	var channels []Channel

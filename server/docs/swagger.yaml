@@ -55,6 +55,8 @@ definitions:
         type: integer
       updatedAt:
         type: string
+      user:
+        $ref: '#/definitions/model.PublicUser'
       userID:
         type: integer
     type: object
@@ -74,6 +76,21 @@ definitions:
         type: string
       userID:
         type: integer
+    type: object
+  model.PublicUser:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      picture:
+        type: string
+      pseudo:
+        type: string
+      role:
+        type: string
+      surname:
+        type: string
     type: object
   model.User:
     properties:
@@ -105,6 +122,42 @@ definitions:
         type: string
       updatedAt:
         type: string
+    type: object
+  route.CheckChanNameBody:
+    properties:
+      name:
+        type: string
+    type: object
+  route.CheckChanNameReturn:
+    properties:
+      available:
+        type: boolean
+      error:
+        type: boolean
+      message:
+        type: string
+    type: object
+  route.CreateChanBody:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      picture:
+        type: string
+      private:
+        type: boolean
+    type: object
+  route.CreateChanReturn:
+    properties:
+      error:
+        type: boolean
+      message:
+        type: string
+      passkey:
+        type: string
+      updated:
+        type: boolean
     type: object
   route.LoginBody:
     properties:
@@ -292,6 +345,66 @@ paths:
       summary: Renew Token
       tags:
       - Auth
+  /chan:
+    post:
+      consumes:
+      - application/json
+      description: Create channel, Name has to be unique
+      parameters:
+      - description: Create channel body
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/route.CreateChanBody'
+      responses:
+        "200":
+          description: Create channel return
+          schema:
+            $ref: '#/definitions/route.CreateChanReturn'
+        "400":
+          description: Create channel return
+          schema:
+            $ref: '#/definitions/route.CreateChanReturn'
+        "500":
+          description: Create channel return
+          schema:
+            $ref: '#/definitions/route.CreateChanReturn'
+      security:
+      - BearerAuth: []
+      summary: Create channel
+      tags:
+      - Chan
+  /chan/name:
+    post:
+      consumes:
+      - application/json
+      description: Check if channel name is available
+      parameters:
+      - description: Check channel name body
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/route.CheckChanNameBody'
+      responses:
+        "200":
+          description: Chann available or not
+          schema:
+            $ref: '#/definitions/route.CheckChanNameReturn'
+        "400":
+          description: Body not valid
+          schema:
+            $ref: '#/definitions/route.CheckChanNameReturn'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/route.CheckChanNameReturn'
+      security:
+      - BearerAuth: []
+      summary: Check if channel name is available
+      tags:
+      - Chan
   /user:
     get:
       description: Get user

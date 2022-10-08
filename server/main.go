@@ -76,5 +76,10 @@ func main() {
 	auth.POST("/renew", route.RenewToken)
 	auth.POST("/register", route.Register)
 
+	channel := api.Group("/chan")
+	channel.Use(middle.Auth())
+	channel.POST("", route.CreateChan)
+	channel.POST("/name", route.CheckChanName)
+
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }
