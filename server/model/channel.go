@@ -17,7 +17,7 @@ type Channel struct {
 	PassKey     string `json:"-"` // crypted field (can be regenerated) and empty if public
 	Users       []ChannelUser
 	Owner       uint
-	Messages    []Message
+	Messages    []Message `json:"-"`
 }
 
 // Generate a new passkey for a channel
@@ -104,11 +104,21 @@ func (c *Channel) GetOwner(db *gorm.DB) (*User, error) {
 }
 
 // Get User By id
-func (c *Channel) GetUserById(db *gorm.DB, id uint) (*ChannelUser, error) {
+func (c *Channel) GetUserById(id uint) (*ChannelUser, error) {
 	for _, user := range c.Users {
 		if user.ID == id {
 			return &user, nil
 		}
 	}
 	return nil, fmt.Errorf("User not found")
+}
+
+// User is in channel
+func (c *Channel) IsUserInChannel(id uint) bool {
+	for _, user := range c.Users {
+		if user.ID == id {
+			return true
+		}
+	}
+	return false
 }

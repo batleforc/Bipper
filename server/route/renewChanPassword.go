@@ -43,7 +43,7 @@ func RenewChanPassword(c echo.Context) error {
 		})
 	}
 	if channel.Owner != user.ID {
-		userRight, err := channel.GetUserById(c.Get("db").(*gorm.DB), user.ID)
+		userRight, err := channel.GetUserById(user.ID)
 		if err != nil {
 			return c.JSON(500, RenewChanPasswordReturn{
 				Updated: false,

@@ -259,6 +259,113 @@ const docTemplate = `{
                 }
             }
         },
+        "/chan/{chanId}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get One Channel by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Get One Channel by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Channel id",
+                        "name": "chanId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Channel",
+                        "schema": {
+                            "$ref": "#/definitions/model.Channel"
+                        }
+                    },
+                    "400": {
+                        "description": "Chan Id is not valid",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    },
+                    "403": {
+                        "description": "User is not in channel",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    },
+                    "500": {
+                        "description": "Error while getting channel, (can be normal if not exist)",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    }
+                }
+            }
+        },
+        "/chan/{chanId}/message": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get One Channel message by id, if user not in chan can't see message",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Get One Channel message by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Channel id",
+                        "name": "chanId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "message",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Message"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Chan Id is not valid",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    },
+                    "403": {
+                        "description": "User is not in channel",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    },
+                    "500": {
+                        "description": "Error while getting channel, (can be normal if not exist)",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    }
+                }
+            }
+        },
         "/chan/{chanId}/renew": {
             "post": {
                 "security": [
@@ -411,12 +518,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
-                },
-                "messages": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Message"
-                    }
                 },
                 "name": {
                     "type": "string"
@@ -625,6 +726,17 @@ const docTemplate = `{
                 },
                 "updated": {
                     "type": "boolean"
+                }
+            }
+        },
+        "route.GetOneChanReturn": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
                 }
             }
         },

@@ -18,10 +18,6 @@ definitions:
         type: string
       id:
         type: integer
-      messages:
-        items:
-          $ref: '#/definitions/model.Message'
-        type: array
       name:
         type: string
       owner:
@@ -158,6 +154,13 @@ definitions:
         type: string
       updated:
         type: boolean
+    type: object
+  route.GetOneChanReturn:
+    properties:
+      error:
+        type: boolean
+      message:
+        type: string
     type: object
   route.LoginBody:
     properties:
@@ -382,6 +385,74 @@ paths:
       security:
       - BearerAuth: []
       summary: Create channel
+      tags:
+      - Chan
+  /chan/{chanId}:
+    get:
+      consumes:
+      - application/json
+      description: Get One Channel by id
+      parameters:
+      - description: Channel id
+        in: path
+        name: chanId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Channel
+          schema:
+            $ref: '#/definitions/model.Channel'
+        "400":
+          description: Chan Id is not valid
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+        "403":
+          description: User is not in channel
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+        "500":
+          description: Error while getting channel, (can be normal if not exist)
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+      security:
+      - BearerAuth: []
+      summary: Get One Channel by id
+      tags:
+      - Chan
+  /chan/{chanId}/message:
+    get:
+      consumes:
+      - application/json
+      description: Get One Channel message by id, if user not in chan can't see message
+      parameters:
+      - description: Channel id
+        in: path
+        name: chanId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: message
+          schema:
+            items:
+              $ref: '#/definitions/model.Message'
+            type: array
+        "400":
+          description: Chan Id is not valid
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+        "403":
+          description: User is not in channel
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+        "500":
+          description: Error while getting channel, (can be normal if not exist)
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+      security:
+      - BearerAuth: []
+      summary: Get One Channel message by id
       tags:
       - Chan
   /chan/{chanId}/renew:
