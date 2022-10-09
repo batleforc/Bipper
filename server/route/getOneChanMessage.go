@@ -10,7 +10,7 @@ import (
 
 // Get One Channel message by id
 // @Summary Get One Channel message by id
-// @Description Get One Channel message by id, if user not in chan can't see message
+// @Description Get One Channel message by id, if user not in chan can't see message and if user hasn't the read right can only see past 24 hour message
 // @Tags Chan
 // @Accept json
 // @Security BearerAuth
@@ -55,5 +55,17 @@ func GetOneChanMessage(c echo.Context) error {
 	if pageString == "" || errPage != nil {
 		page = 1
 	}
-	return c.JSON(200, channel.GetPaginatedMessages(c.Get("db").(*gorm.DB), limit, page))
+
+	chanUser, err := channel.GetUserById(user.ID)
+	if err != nil {
+		return c.JSON(500, GetOneChanReturn{
+			Error:   true,
+			Message: "Error while getting channel",
+		})
+	}
+	if chanUser.CanRead {
+		return c.JSON(200, channel.GetPaginatedMessages(c.Get("db").(*gorm.DB), limit, page))
+	} else {
+		return c.JSON(200, channel.GetPast24HourMessages(c.Get("db").(*gorm.DB), limit, page))
+	}
 }

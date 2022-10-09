@@ -136,3 +136,10 @@ func (c *Channel) GetPaginatedMessages(db *gorm.DB, limit, page int) []Message {
 	db.Model(&Message{}).Where("channel_id = ?", c.ID).Offset((page - 1) * limit).Limit(limit).Find(&messages)
 	return messages
 }
+
+// Get past hour messages
+func (c *Channel) GetPast24HourMessages(db *gorm.DB, limit, page int) []Message {
+	var messages []Message
+	db.Model(&Message{}).Where("channel_id = ? AND created_at > NOW() - INTERVAL '24 hour'", c.ID).Offset((page - 1) * limit).Limit(limit).Find(&messages)
+	return messages
+}

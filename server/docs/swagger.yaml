@@ -182,6 +182,15 @@ definitions:
           $ref: '#/definitions/model.Channel'
         type: array
     type: object
+  route.JoinChanReturn:
+    properties:
+      error:
+        type: boolean
+      joined:
+        type: boolean
+      message:
+        type: string
+    type: object
   route.LoginBody:
     properties:
       email:
@@ -484,11 +493,45 @@ paths:
       summary: Get One Channel by id
       tags:
       - Chan
+  /chan/{chanId}/join:
+    post:
+      consumes:
+      - application/json
+      description: Get One Channel by id
+      parameters:
+      - description: Channel id
+        in: path
+        name: chanId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Channel
+          schema:
+            $ref: '#/definitions/model.Channel'
+        "400":
+          description: Chan Id is not valid
+          schema:
+            $ref: '#/definitions/route.JoinChanReturn'
+        "403":
+          description: Chan Id is not valid
+          schema:
+            $ref: '#/definitions/route.JoinChanReturn'
+        "500":
+          description: Error while getting channel, (can be normal if not exist)
+          schema:
+            $ref: '#/definitions/route.JoinChanReturn'
+      security:
+      - BearerAuth: []
+      summary: Get One Channel by id
+      tags:
+      - Chan
   /chan/{chanId}/message:
     get:
       consumes:
       - application/json
       description: Get One Channel message by id, if user not in chan can't see message
+        and if user hasn't the read right can only see past 24 hour message
       parameters:
       - description: Channel id
         in: path

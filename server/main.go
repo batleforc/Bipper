@@ -86,6 +86,7 @@ func main() {
 	channel.GET("/public", route.GetPublicChannels)
 	channel.GET("", route.GetUserChan)
 	channel.DELETE("/:chanId", route.DeleteChan)
+	channel.POST("/:chanId/join", route.JoinChan)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }

@@ -434,6 +434,58 @@
                 }
             }
         },
+        "/chan/{chanId}/join": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get One Channel by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Get One Channel by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Channel id",
+                        "name": "chanId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Channel",
+                        "schema": {
+                            "$ref": "#/definitions/model.Channel"
+                        }
+                    },
+                    "400": {
+                        "description": "Chan Id is not valid",
+                        "schema": {
+                            "$ref": "#/definitions/route.JoinChanReturn"
+                        }
+                    },
+                    "403": {
+                        "description": "Chan Id is not valid",
+                        "schema": {
+                            "$ref": "#/definitions/route.JoinChanReturn"
+                        }
+                    },
+                    "500": {
+                        "description": "Error while getting channel, (can be normal if not exist)",
+                        "schema": {
+                            "$ref": "#/definitions/route.JoinChanReturn"
+                        }
+                    }
+                }
+            }
+        },
         "/chan/{chanId}/message": {
             "get": {
                 "security": [
@@ -441,7 +493,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get One Channel message by id, if user not in chan can't see message",
+                "description": "Get One Channel message by id, if user not in chan can't see message and if user hasn't the read right can only see past 24 hour message",
                 "consumes": [
                     "application/json"
                 ],
@@ -903,6 +955,20 @@
                     "items": {
                         "$ref": "#/definitions/model.Channel"
                     }
+                }
+            }
+        },
+        "route.JoinChanReturn": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "boolean"
+                },
+                "joined": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
                 }
             }
         },
