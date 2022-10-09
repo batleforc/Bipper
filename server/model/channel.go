@@ -63,6 +63,13 @@ func (c *Channel) GetPublicChannels(db *gorm.DB, limit, page int) (*[]Channel, e
 	return &channels, err
 }
 
+// Get All public channels search
+func (c *Channel) GetPublicChannelsSearch(db *gorm.DB, limit, page int, search string) (*[]Channel, error) {
+	var channels []Channel
+	err := db.Model(&Channel{}).Preload("Users").Preload("Messages").Offset((page-1)*limit).Limit(limit).Where("private = ? AND name LIKE ?", false, "%"+search+"%").Find(&channels).Error
+	return &channels, err
+}
+
 // Delete one Channel
 func (c *Channel) DeleteChannel(db *gorm.DB, id uint) error {
 	err := db.Delete(c, id).Error
@@ -121,4 +128,11 @@ func (c *Channel) IsUserInChannel(id uint) bool {
 		}
 	}
 	return false
+}
+
+// Get Chann message paginated
+func (c *Channel) GetPaginatedMessages(db *gorm.DB, limit, page int) []Message {
+	var messages []Message
+	db.Model(&Message{}).Where("channel_id = ?", c.ID).Offset((page - 1) * limit).Limit(limit).Find(&messages)
+	return messages
 }

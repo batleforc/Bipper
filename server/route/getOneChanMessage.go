@@ -19,6 +19,8 @@ import (
 // @Failure 403 {object} route.GetOneChanReturn "User is not in channel"
 // @Failure 500 {object} route.GetOneChanReturn "Error while getting channel, (can be normal if not exist)"
 // @Param chanId path string true "Channel id"
+// @Param limit query int false "Limit of message"
+// @Param page query int false "Page of message"
 // @Router /chan/{chanId}/message [get]
 func GetOneChanMessage(c echo.Context) error {
 	chanIdString := c.Param("chanId")
@@ -43,5 +45,15 @@ func GetOneChanMessage(c echo.Context) error {
 			Message: "User is not in channel",
 		})
 	}
-	return c.JSON(200, channel.Messages)
+	limitString := c.QueryParam("limit")
+	pageString := c.QueryParam("page")
+	limit, errLimit := strconv.Atoi(limitString)
+	page, errPage := strconv.Atoi(pageString)
+	if limitString == "" || errLimit != nil {
+		limit = 10
+	}
+	if pageString == "" || errPage != nil {
+		page = 1
+	}
+	return c.JSON(200, channel.GetPaginatedMessages(c.Get("db").(*gorm.DB), limit, page))
 }

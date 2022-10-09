@@ -83,6 +83,7 @@ func main() {
 	channel.POST("/:chanId/renew", route.RenewChanPassword)
 	channel.GET("/:chanId", route.GetOneChan)
 	channel.GET("/:chanId/message", route.GetOneChanMessage)
+	channel.GET("/public", route.GetPublicChannels)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }

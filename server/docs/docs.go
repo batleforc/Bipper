@@ -259,6 +259,67 @@ const docTemplate = `{
                 }
             }
         },
+        "/chan/public": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Public channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Get Public channel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Channel id",
+                        "name": "chanId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit of Channel",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Search in Channel",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page of Channel",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Channel",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Channel"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error while getting channel",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    }
+                }
+            }
+        },
         "/chan/{chanId}": {
             "get": {
                 "security": [
@@ -333,6 +394,18 @@ const docTemplate = `{
                         "name": "chanId",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit of message",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page of message",
+                        "name": "page",
+                        "in": "query"
                     }
                 ],
                 "responses": {

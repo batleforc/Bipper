@@ -431,6 +431,14 @@ paths:
         name: chanId
         required: true
         type: string
+      - description: Limit of message
+        in: query
+        name: limit
+        type: integer
+      - description: Page of message
+        in: query
+        name: page
+        type: integer
       responses:
         "200":
           description: message
@@ -504,6 +512,45 @@ paths:
       security:
       - BearerAuth: []
       summary: Check if channel name is available
+      tags:
+      - Chan
+  /chan/public:
+    get:
+      consumes:
+      - application/json
+      description: Get Public channel
+      parameters:
+      - description: Channel id
+        in: path
+        name: chanId
+        required: true
+        type: string
+      - description: Limit of Channel
+        in: query
+        name: limit
+        type: integer
+      - description: Search in Channel
+        in: query
+        name: search
+        type: integer
+      - description: Page of Channel
+        in: query
+        name: page
+        type: integer
+      responses:
+        "200":
+          description: Channel
+          schema:
+            items:
+              $ref: '#/definitions/model.Channel'
+            type: array
+        "500":
+          description: Error while getting channel
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+      security:
+      - BearerAuth: []
+      summary: Get Public channel
       tags:
       - Chan
   /user:
