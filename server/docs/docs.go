@@ -562,7 +562,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Chan"
+                    "Message"
                 ],
                 "summary": "Get One Channel messages by id",
                 "parameters": [

@@ -11,7 +11,7 @@ import (
 // Get One Channel messages by id
 // @Summary Get One Channel messages by id
 // @Description Get One Channel messages by id, if user not in chan can't see message and if user hasn't the read right can only see past 24 hour message
-// @Tags Chan
+// @Tags Message
 // @Accept json
 // @Security BearerAuth
 // @Success 200 {object} []model.Message "message"

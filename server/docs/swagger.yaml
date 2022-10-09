@@ -641,7 +641,7 @@ paths:
       - BearerAuth: []
       summary: Get One Channel messages by id
       tags:
-      - Chan
+      - Message
   /chan/{chanId}/renew:
     post:
       consumes:
