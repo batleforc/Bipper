@@ -282,6 +282,22 @@ definitions:
       updated:
         type: boolean
     type: object
+  route.UpdateChannelBody:
+    properties:
+      description:
+        type: string
+      private:
+        type: boolean
+    type: object
+  route.UpdateChannelReturn:
+    properties:
+      error:
+        type: boolean
+      message:
+        type: string
+      updated:
+        type: boolean
+    type: object
   route.UpdateUserChanRightBody:
     properties:
       canMod:
@@ -511,6 +527,42 @@ paths:
       security:
       - BearerAuth: []
       summary: Get One Channel by id
+      tags:
+      - Chan
+    post:
+      description: Update Channel
+      parameters:
+      - description: Channel Id
+        in: path
+        name: chanId
+        required: true
+        type: integer
+      - description: Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/route.UpdateChannelBody'
+      responses:
+        "200":
+          description: Update User Channel Right
+          schema:
+            $ref: '#/definitions/route.UpdateChannelReturn'
+        "400":
+          description: Chan Id is not valid or error while getting body
+          schema:
+            $ref: '#/definitions/route.UpdateChannelReturn'
+        "403":
+          description: User is not in channel or User is not allowed to update channel
+          schema:
+            $ref: '#/definitions/route.UpdateChannelReturn'
+        "500":
+          description: Error while getting channel, channel user or updating channel
+          schema:
+            $ref: '#/definitions/route.UpdateChannelReturn'
+      security:
+      - BearerAuth: []
+      summary: Update Channel
       tags:
       - Chan
   /chan/{chanId}/join:

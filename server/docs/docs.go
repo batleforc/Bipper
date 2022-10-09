@@ -391,6 +391,62 @@ const docTemplate = `{
                     }
                 }
             },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update Channel",
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Update Channel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Channel Id",
+                        "name": "chanId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateChannelBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update User Channel Right",
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateChannelReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Chan Id is not valid or error while getting body",
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateChannelReturn"
+                        }
+                    },
+                    "403": {
+                        "description": "User is not in channel or User is not allowed to update channel",
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateChannelReturn"
+                        }
+                    },
+                    "500": {
+                        "description": "Error while getting channel, channel user or updating channel",
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateChannelReturn"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -1167,6 +1223,31 @@ const docTemplate = `{
             }
         },
         "route.SetUserReturn": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "updated": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "route.UpdateChannelBody": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "private": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "route.UpdateChannelReturn": {
             "type": "object",
             "properties": {
                 "error": {
