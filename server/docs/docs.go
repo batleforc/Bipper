@@ -164,6 +164,26 @@ const docTemplate = `{
             }
         },
         "/chan": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get user channels",
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Get user channels",
+                "responses": {
+                    "200": {
+                        "description": "Get User Channels",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetUserChanReturn"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -810,6 +830,23 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "route.GetUserChanReturn": {
+            "type": "object",
+            "properties": {
+                "memberChan": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Channel"
+                    }
+                },
+                "ownChan": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Channel"
+                    }
                 }
             }
         },

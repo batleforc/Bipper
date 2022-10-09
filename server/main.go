@@ -84,6 +84,7 @@ func main() {
 	channel.GET("/:chanId", route.GetOneChan)
 	channel.GET("/:chanId/message", route.GetOneChanMessage)
 	channel.GET("/public", route.GetPublicChannels)
+	channel.GET("", route.GetUserChan)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }

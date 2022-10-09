@@ -111,3 +111,10 @@ func (u *User) UpdateOrCreateUser(db *gorm.DB) error {
 	err := db.Save(u).Error
 	return err
 }
+
+// Get all channels of user
+func (u *User) GetChannels(db *gorm.DB) (*[]Channel, error) {
+	var channels []Channel
+	err := db.Model(&u).Association("Channels").Find(&channels)
+	return &channels, err
+}

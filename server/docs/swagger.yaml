@@ -162,6 +162,17 @@ definitions:
       message:
         type: string
     type: object
+  route.GetUserChanReturn:
+    properties:
+      memberChan:
+        items:
+          $ref: '#/definitions/model.Channel'
+        type: array
+      ownChan:
+        items:
+          $ref: '#/definitions/model.Channel'
+        type: array
+    type: object
   route.LoginBody:
     properties:
       email:
@@ -358,6 +369,18 @@ paths:
       tags:
       - Auth
   /chan:
+    get:
+      description: Get user channels
+      responses:
+        "200":
+          description: Get User Channels
+          schema:
+            $ref: '#/definitions/route.GetUserChanReturn'
+      security:
+      - BearerAuth: []
+      summary: Get user channels
+      tags:
+      - Chan
     post:
       consumes:
       - application/json
