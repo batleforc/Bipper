@@ -390,6 +390,56 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Delete channel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Channel id",
+                        "name": "chanId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Is Deleted ?",
+                        "schema": {
+                            "$ref": "#/definitions/route.DeleteChanReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Chan Id is not valid",
+                        "schema": {
+                            "$ref": "#/definitions/route.DeleteChanReturn"
+                        }
+                    },
+                    "403": {
+                        "description": "User is not the owner of the channel",
+                        "schema": {
+                            "$ref": "#/definitions/route.DeleteChanReturn"
+                        }
+                    },
+                    "500": {
+                        "description": "Error while getting channel or deleting channel",
+                        "schema": {
+                            "$ref": "#/definitions/route.DeleteChanReturn"
+                        }
+                    }
+                }
             }
         },
         "/chan/{chanId}/message": {
@@ -819,6 +869,20 @@ const docTemplate = `{
                 },
                 "updated": {
                     "type": "boolean"
+                }
+            }
+        },
+        "route.DeleteChanReturn": {
+            "type": "object",
+            "properties": {
+                "deleted": {
+                    "type": "boolean"
+                },
+                "error": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
                 }
             }
         },

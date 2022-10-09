@@ -155,6 +155,15 @@ definitions:
       updated:
         type: boolean
     type: object
+  route.DeleteChanReturn:
+    properties:
+      deleted:
+        type: boolean
+      error:
+        type: boolean
+      message:
+        type: string
+    type: object
   route.GetOneChanReturn:
     properties:
       error:
@@ -411,6 +420,38 @@ paths:
       tags:
       - Chan
   /chan/{chanId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete channel
+      parameters:
+      - description: Channel id
+        in: path
+        name: chanId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Is Deleted ?
+          schema:
+            $ref: '#/definitions/route.DeleteChanReturn'
+        "400":
+          description: Chan Id is not valid
+          schema:
+            $ref: '#/definitions/route.DeleteChanReturn'
+        "403":
+          description: User is not the owner of the channel
+          schema:
+            $ref: '#/definitions/route.DeleteChanReturn'
+        "500":
+          description: Error while getting channel or deleting channel
+          schema:
+            $ref: '#/definitions/route.DeleteChanReturn'
+      security:
+      - BearerAuth: []
+      summary: Delete channel
+      tags:
+      - Chan
     get:
       consumes:
       - application/json
