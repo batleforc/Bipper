@@ -282,6 +282,26 @@ definitions:
       updated:
         type: boolean
     type: object
+  route.UpdateUserChanRightBody:
+    properties:
+      canMod:
+        type: boolean
+      canRead:
+        type: boolean
+      canSend:
+        type: boolean
+      userId:
+        type: integer
+    type: object
+  route.UpdateUserChanRightReturn:
+    properties:
+      error:
+        type: boolean
+      message:
+        type: string
+      updated:
+        type: boolean
+    type: object
 info:
   contact:
     email: maxleriche.60@gmail.com
@@ -530,7 +550,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get One Channel message by id, if user not in chan can't see message
+      description: Get One Channel messages by id, if user not in chan can't see message
         and if user hasn't the read right can only see past 24 hour message
       parameters:
       - description: Channel id
@@ -567,7 +587,7 @@ paths:
             $ref: '#/definitions/route.GetOneChanReturn'
       security:
       - BearerAuth: []
-      summary: Get One Channel message by id
+      summary: Get One Channel messages by id
       tags:
       - Chan
   /chan/{chanId}/renew:
@@ -589,6 +609,45 @@ paths:
       security:
       - BearerAuth: []
       summary: Reset channel password
+      tags:
+      - Chan
+  /chan/{chanId}/right:
+    post:
+      description: Update User Channel Right
+      parameters:
+      - description: Channel Id
+        in: path
+        name: chanId
+        required: true
+        type: integer
+      - description: Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/route.UpdateUserChanRightBody'
+      responses:
+        "200":
+          description: Update User Channel Right
+          schema:
+            $ref: '#/definitions/route.UpdateUserChanRightReturn'
+        "400":
+          description: Chan Id is not valid or error while getting body
+          schema:
+            $ref: '#/definitions/route.UpdateUserChanRightReturn'
+        "403":
+          description: User is not in channel or User is not allowed to update user
+            right
+          schema:
+            $ref: '#/definitions/route.UpdateUserChanRightReturn'
+        "500":
+          description: Error while getting channel, channel user or updating user
+            right
+          schema:
+            $ref: '#/definitions/route.UpdateUserChanRightReturn'
+      security:
+      - BearerAuth: []
+      summary: Update User Channel Right
       tags:
       - Chan
   /chan/name:

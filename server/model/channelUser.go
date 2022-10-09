@@ -45,3 +45,9 @@ func (cu *ChannelUser) CreateChannelUser(db *gorm.DB) error {
 	err := db.Create(cu).Error
 	return err
 }
+
+// Update one ChannelUser
+func (cu *ChannelUser) UpdateChannelUser(db *gorm.DB) error {
+	err := db.Save(cu).Error
+	return err
+}

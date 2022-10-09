@@ -501,14 +501,14 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get One Channel message by id, if user not in chan can't see message and if user hasn't the read right can only see past 24 hour message",
+                "description": "Get One Channel messages by id, if user not in chan can't see message and if user hasn't the read right can only see past 24 hour message",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "Chan"
                 ],
-                "summary": "Get One Channel message by id",
+                "summary": "Get One Channel messages by id",
                 "parameters": [
                     {
                         "type": "string",
@@ -590,6 +590,64 @@ const docTemplate = `{
                         "description": "Reset channel password return",
                         "schema": {
                             "$ref": "#/definitions/route.RenewChanPasswordReturn"
+                        }
+                    }
+                }
+            }
+        },
+        "/chan/{chanId}/right": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update User Channel Right",
+                "tags": [
+                    "Chan"
+                ],
+                "summary": "Update User Channel Right",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Channel Id",
+                        "name": "chanId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateUserChanRightBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update User Channel Right",
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateUserChanRightReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Chan Id is not valid or error while getting body",
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateUserChanRightReturn"
+                        }
+                    },
+                    "403": {
+                        "description": "User is not in channel or User is not allowed to update user right",
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateUserChanRightReturn"
+                        }
+                    },
+                    "500": {
+                        "description": "Error while getting channel, channel user or updating user right",
+                        "schema": {
+                            "$ref": "#/definitions/route.UpdateUserChanRightReturn"
                         }
                     }
                 }
@@ -1109,6 +1167,37 @@ const docTemplate = `{
             }
         },
         "route.SetUserReturn": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "updated": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "route.UpdateUserChanRightBody": {
+            "type": "object",
+            "properties": {
+                "canMod": {
+                    "type": "boolean"
+                },
+                "canRead": {
+                    "type": "boolean"
+                },
+                "canSend": {
+                    "type": "boolean"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "route.UpdateUserChanRightReturn": {
             "type": "object",
             "properties": {
                 "error": {

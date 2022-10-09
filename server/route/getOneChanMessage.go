@@ -8,9 +8,9 @@ import (
 	"gorm.io/gorm"
 )
 
-// Get One Channel message by id
-// @Summary Get One Channel message by id
-// @Description Get One Channel message by id, if user not in chan can't see message and if user hasn't the read right can only see past 24 hour message
+// Get One Channel messages by id
+// @Summary Get One Channel messages by id
+// @Description Get One Channel messages by id, if user not in chan can't see message and if user hasn't the read right can only see past 24 hour message
 // @Tags Chan
 // @Accept json
 // @Security BearerAuth
