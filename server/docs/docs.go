@@ -615,6 +615,62 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Send Message",
+                "tags": [
+                    "Message"
+                ],
+                "summary": "Send Message",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Channel Id",
+                        "name": "chanId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/route.SendMessageContent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Send Message",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Send Message",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    },
+                    "403": {
+                        "description": "Send Message",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    },
+                    "500": {
+                        "description": "Send Message",
+                        "schema": {
+                            "$ref": "#/definitions/route.GetOneChanReturn"
+                        }
+                    }
+                }
             }
         },
         "/chan/{chanId}/renew": {
@@ -1196,6 +1252,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "route.SendMessageContent": {
+            "type": "object",
+            "properties": {
+                "content": {
                     "type": "string"
                 }
             }

@@ -259,6 +259,11 @@ definitions:
       role:
         type: string
     type: object
+  route.SendMessageContent:
+    properties:
+      content:
+        type: string
+    type: object
   route.SetPictureReturn:
     properties:
       message:
@@ -640,6 +645,42 @@ paths:
       security:
       - BearerAuth: []
       summary: Get One Channel messages by id
+      tags:
+      - Message
+    post:
+      description: Send Message
+      parameters:
+      - description: Channel Id
+        in: path
+        name: chanId
+        required: true
+        type: integer
+      - description: Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/route.SendMessageContent'
+      responses:
+        "200":
+          description: Send Message
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+        "400":
+          description: Send Message
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+        "403":
+          description: Send Message
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+        "500":
+          description: Send Message
+          schema:
+            $ref: '#/definitions/route.GetOneChanReturn'
+      security:
+      - BearerAuth: []
+      summary: Send Message
       tags:
       - Message
   /chan/{chanId}/renew:
