@@ -1,4 +1,11 @@
 import { Api, type RouteLogoutBody, type RouteRegisterBody } from "@/api/Api";
+import {
+  getRefreshToken,
+  removeAccessToken,
+  removeRefreshToken,
+  storeAccessToken,
+  storeRefreshToken,
+} from "@/helper/tokenHandler";
 import { defineStore } from "pinia";
 
 export const useGlobalStore = defineStore({
@@ -6,22 +13,47 @@ export const useGlobalStore = defineStore({
   state: () => ({
     Api: new Api(),
     inited: false,
+    loggedIn: false,
+    user: {
+      id: 0,
+      pseudo: "",
+      email: "",
+      name: "",
+      surname: "",
+      picture: "",
+      role: "",
+      loaded: false,
+    },
+    chan: {
+      myChan: [],
+      chan: [],
+    },
   }),
   actions: {
     init() {
       this.inited = true;
       if (import.meta.env.VITE_API !== undefined)
         this.Api.baseUrl = import.meta.env.VITE_API;
-      // TODO : Check if renew token is valid
-      // TODO : If not valid go to /login
-      // TODO : If valid go to /home and fetch access token + userinfo
+      if (getRefreshToken() == null) {
+        window.location.href = "/login";
+      } else {
+        this.renewToken().then((res) => {
+          window.location.href = "/home";
+        });
+      }
     },
     login({ email, password }: { email: string; password: string }) {
-      this.Api.auth
+      return this.Api.auth
         .loginCreate({ email, password })
-        .then((res) => {
-          // TODO : Save Refresh token
-          // TODO : Save Access token and fetch userinfo
+        .then(({ data }) => {
+          if (data.renew_token === null && data.access_token === null) {
+            window.location.href = "/login";
+          }
+          storeRefreshToken(data.renew_token || "");
+          storeAccessToken(data.access_token || "");
+          return this.fetchUserInfo().then(() => {
+            window.location.href = "/home";
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -29,43 +61,92 @@ export const useGlobalStore = defineStore({
         });
     },
     logout() {
-      this.Api.auth
-        .logoutCreate({
-          renew_token: "Renew Token",
-        })
-        .then((res) => {
-          // TODO : Remove Refresh token, call logout endpoint
-          // TODO : Remove Access token and userinfo
-        })
-        .catch((err) => {
-          // TODO : Remove refresh token and access token
-          // TODO : Notify user that logout failed but device is logged out
+      var token = getRefreshToken();
+      if (token != null)
+        return this.Api.auth
+          .logoutCreate({
+            renew_token: token,
+          })
+          .then((res) => {
+            removeRefreshToken();
+            removeAccessToken();
+            window.location.href = "/";
+            window.location.reload();
+          })
+          .catch((err) => {
+            removeRefreshToken();
+            removeAccessToken();
+            this.user = {
+              id: 0,
+              pseudo: "",
+              email: "",
+              name: "",
+              surname: "",
+              picture: "",
+              role: "",
+              loaded: false,
+            };
+            console.log(err);
+            return { status: "failure", err };
+          });
+      else {
+        return new Promise((resolve, reject) => {
+          window.location.href = "/login";
+          window.location.reload();
+          resolve("Redirect to /login");
         });
+      }
     },
     register(registrerBody: RouteRegisterBody) {
-      // TODO : Call register endpoint
-
-      this.Api.auth
+      return this.Api.auth
         .registerCreate(registrerBody)
         .then((res) => {
-          // TODO : If success go to /login
+          window.location.href = "/login";
         })
         .catch((err) => {
           // TODO : If error show error to register screen
         });
     },
     renewToken() {
-      // TODO : Call renew token endpoint
-      this.Api.auth
-        .renewCreate({
-          renew_token: "Renew Token",
+      var token = getRefreshToken();
+      if (token != null)
+        return this.Api.auth
+          .renewCreate({
+            renew_token: token,
+          })
+          .then((res) => {
+            if (res.data.access_token !== undefined)
+              storeAccessToken(res.data.access_token);
+          })
+          .catch((err) => {
+            removeRefreshToken();
+            removeAccessToken();
+            // TODO : Notify user that login failed but device is logged out
+          });
+      else {
+        return new Promise((resolve, reject) => {
+          removeRefreshToken();
+          removeAccessToken();
+          resolve("Redirect to /login");
+        });
+      }
+    },
+    fetchUserInfo() {
+      return this.Api.user
+        .userList({
+          headers: {
+            Authorization: `Bearer ${getRefreshToken()}`,
+          },
         })
-        .then((res) => {
-          // TODO : Save new access token
-        })
-        .catch((err) => {
-          // TODO : Remove refresh token and access token
-          // TODO : Notify user that login failed but device is logged out
+        .then(({ data }) => {
+          if (data.id !== undefined) this.user.id = data.id;
+          if (data.email !== undefined) this.user.email = data.email;
+          if (data.pseudo !== undefined) this.user.pseudo = data.pseudo;
+          if (data.name !== undefined) this.user.name = data.name;
+          if (data.surname !== undefined) this.user.surname = data.surname;
+          if (data.picture !== undefined) this.user.picture = data.picture;
+          if (data.role !== undefined) this.user.role = data.role;
+          this.user.loaded = true;
         });
     },
   },
