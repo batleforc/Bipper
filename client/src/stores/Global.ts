@@ -38,7 +38,9 @@ export const useGlobalStore = defineStore({
         window.location.href = "/login";
       } else {
         this.renewToken().then((res) => {
-          window.location.href = "/home";
+          this.fetchUserInfo().then(() => {
+            window.location.href = "/home";
+          });
         });
       }
     },
