@@ -12,9 +12,9 @@ type ChannelUser struct {
 	User      PublicUser `gorm:"-:all"`
 }
 
-func (cu *ChannelUser) SetPublicUser(db *gorm.DB, id uint) error {
+func (cu *ChannelUser) SetPublicUser(db *gorm.DB) error {
 	user := User{}
-	err := user.GetUser(db, id)
+	err := user.GetUser(db, cu.ID)
 	if err == nil {
 		cu.User = user.ToPublicUser()
 	}

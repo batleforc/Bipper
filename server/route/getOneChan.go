@@ -50,5 +50,8 @@ func GetOneChan(c echo.Context) error {
 			})
 		}
 	}
+	for i := range channel.Users {
+		channel.Users[i].SetPublicUser(c.Get("db").(*gorm.DB))
+	}
 	return c.JSON(200, channel)
 }
