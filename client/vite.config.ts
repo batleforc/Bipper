@@ -11,6 +11,9 @@ export default ({ mode }: { mode: string }) => {
     plugins: [vue(), vueJsx()],
     server: {
       port: parseInt(process.env.PORT || "3000"),
+      hmr: {
+        port: parseInt(process.env.HMR_PORT || "3010"),
+      }
     },
     resolve: {
       alias: {
