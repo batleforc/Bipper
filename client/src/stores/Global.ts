@@ -32,12 +32,27 @@ export const useGlobalStore = defineStore({
   actions: {
     init() {
       this.inited = true;
+      this.router.beforeEach((to, from, next) => {
+        if (to.matched.some((record) => record.meta.requiresAuth)) {
+          // this route requires auth, check if logged in
+          // if not, redirect to login page.
+          if (!this.loggedIn) {
+            //this.router.push({ name: "login" });
+            next({ name: "login" });
+          } else {
+            next(); // go to wherever I'm going
+          }
+        } else {
+          next(); // does not require auth, make sure to always call next()!
+        }
+      });
       if (import.meta.env.VITE_API !== undefined)
         this.Api.baseUrl = import.meta.env.VITE_API;
-      if (getRefreshToken() == null) {
-        this.router.push({ name: "login" });
-      } else {
+      if (getRefreshToken() != null) {
         this.renewToken().then((res) => {
+          if (res) {
+            console.log(res);
+          }
           this.fetchUserInfo().then(() => {
             this.router.push({ name: "home" });
           });
@@ -117,12 +132,16 @@ export const useGlobalStore = defineStore({
             renew_token: token,
           })
           .then((res) => {
-            if (res.data.access_token !== undefined)
+            if (res.data.access_token !== undefined) {
+              this.loggedIn = true;
               storeAccessToken(res.data.access_token);
+            }
+            return { status: "success", res };
           })
           .catch((err) => {
             removeRefreshToken();
             removeAccessToken();
+            return { status: "failure", err };
             // TODO : Notify user that login failed but device is logged out
           });
       else {

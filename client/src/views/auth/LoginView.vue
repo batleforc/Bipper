@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h1>Home screen for authenticated user</h1>
+  <h1>Login Screen</h1>
 </template>
