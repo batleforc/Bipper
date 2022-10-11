@@ -35,11 +35,11 @@ export const useGlobalStore = defineStore({
       if (import.meta.env.VITE_API !== undefined)
         this.Api.baseUrl = import.meta.env.VITE_API;
       if (getRefreshToken() == null) {
-        window.location.href = "/login";
+        this.router.push({ name: "login" });
       } else {
         this.renewToken().then((res) => {
           this.fetchUserInfo().then(() => {
-            window.location.href = "/home";
+            this.router.push({ name: "home" });
           });
         });
       }
@@ -49,12 +49,12 @@ export const useGlobalStore = defineStore({
         .loginCreate({ email, password })
         .then(({ data }) => {
           if (data.renew_token === null && data.access_token === null) {
-            window.location.href = "/login";
+            this.router.push({ name: "login" });
           }
           storeRefreshToken(data.renew_token || "");
           storeAccessToken(data.access_token || "");
           return this.fetchUserInfo().then(() => {
-            window.location.href = "/home";
+            this.router.push({ name: "home" });
           });
         })
         .catch((err) => {
@@ -103,7 +103,7 @@ export const useGlobalStore = defineStore({
       return this.Api.auth
         .registerCreate(registrerBody)
         .then((res) => {
-          window.location.href = "/login";
+          this.router.push({ name: "login" });
         })
         .catch((err) => {
           // TODO : If error show error to register screen
@@ -129,6 +129,7 @@ export const useGlobalStore = defineStore({
         return new Promise((resolve, reject) => {
           removeRefreshToken();
           removeAccessToken();
+          this.router.push({ name: "login" });
           resolve("Redirect to /login");
         });
       }
