@@ -38,7 +38,7 @@ services:
       - 3001:3001
     volumes:
       - ./server:/app
-    command: go get . && swag init && air
+    command: air
   server-gen-swagger:
     container_name: server-api-swagger
     build:
