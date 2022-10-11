@@ -1,0 +1,12 @@
+.tooltip {
+  @apply invisible hidden;
+}
+
+.has-tooltip:hover .tooltip {
+  @apply visible inline-block z-50;
+}
+
+.defaultToolTip {
+  @apply rounded shadow-lg p-1 text-white;
+  background-color: var(--color-dark-blue);
+}
