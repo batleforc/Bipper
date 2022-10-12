@@ -13,8 +13,11 @@
     height: 24px;
   }
   .profile-container {
-    @apply rounded-2xl border-2 p-1;
+    @apply rounded-2xl border-2 p-1 cursor-pointer;
     background-color: var(--color-light-gray);
     border-color: var(--color-light-blue);
+  }
+  .burger-container {
+    @apply cursor-pointer;
   }
 }

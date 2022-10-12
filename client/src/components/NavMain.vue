@@ -6,7 +6,7 @@ import Bell from "./icon/bell.vue";
 </script>
 <template>
   <nav class="nav">
-    <div>
+    <div class="burger-container">
       <Burger />
     </div>
     <div>

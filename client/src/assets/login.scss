@@ -1,0 +1,48 @@
+.login-container {
+  @apply flex flex-col items-center justify-center h-3/5;
+}
+.login-container2 {
+  @apply flex flex-col items-center justify-center h-3/5;
+  h1 {
+    @apply text-3xl font-bold m-2 text-center;
+    color: var(--color-dark-blue2);
+  }
+}
+.main-login {
+  background-color: var(--color-light-blue);
+  @apply h-screen w-screen;
+}
+
+.login-form-input-container {
+  @apply flex flex-col items-center justify-center;
+  color: var(--color-dark-blue2);
+  label {
+    @apply font-bold mt-2;
+  }
+  input {
+    @apply w-80 h-10 rounded-lg border-2 focus:outline-none;
+    border-color: var(--color-dark-blue);
+    :focus {
+      border-color: var(--color-light-blue);
+    }
+    padding: 0 1rem;
+    margin: 0.5rem 0;
+  }
+  button {
+    @apply w-80 h-10 rounded-lg border-2 focus:outline-none;
+    border-color: var(--color-dark-blue);
+    :focus {
+      border-color: var(--color-light-blue);
+    }
+    padding: 0 1rem;
+    margin: 0.5rem 0;
+  }
+}
+
+.login-register-container {
+  @apply flex flex-col items-center justify-center;
+  color: var(--color-dark-blue2);
+  a {
+    @apply text-blue-500;
+  }
+}

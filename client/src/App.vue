@@ -12,19 +12,18 @@ window.stores = {
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
+  <div :class="'main-' + String($route.name)">
+    <header>
       <NavMain />
-      <nav>
+      <nav v-if="false">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/app">app</RouterLink>
         <RouterLink to="/login">login</RouterLink>
         <RouterLink to="/register">register</RouterLink>
       </nav>
-    </div>
-  </header>
-  <h1>Hello truc</h1>
-  <RouterView />
+    </header>
+    <RouterView />
+  </div>
 </template>
 
 <style>
