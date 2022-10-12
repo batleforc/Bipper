@@ -42,6 +42,12 @@ export const useGlobalStore = defineStore({
           } else {
             next(); // go to wherever I'm going
           }
+        } else if (to.matched.some((record) => record.meta.hiddenIfLoggedIn)) {
+          if (this.loggedIn) {
+            next({ name: "home" });
+          } else {
+            next();
+          }
         } else {
           next(); // does not require auth, make sure to always call next()!
         }
