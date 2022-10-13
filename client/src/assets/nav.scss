@@ -21,3 +21,8 @@
     @apply cursor-pointer;
   }
 }
+.nav2 {
+  @apply sticky top-0 px-2 py-1 flex items-center justify-center rounded-b -mt-1;
+  background-color: var(--color-dark-blue);
+  color: var(--color-light-red);
+}

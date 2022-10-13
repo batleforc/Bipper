@@ -16,6 +16,7 @@ export const useGlobalStore = defineStore({
     Api: new Api(),
     inited: false,
     loggedIn: false,
+    noInternetMessage: false,
     user: {
       id: 0,
       pseudo: "",
@@ -155,8 +156,12 @@ export const useGlobalStore = defineStore({
             return { status: "success" };
           })
           .catch((err) => {
-            removeRefreshToken();
-            removeAccessToken();
+            if (!window.navigator.onLine) {
+              this.noInternetMessage = true;
+            } else {
+              removeRefreshToken();
+              removeAccessToken();
+            }
             return { status: "failure", err };
             // TODO : Notify user that login failed but device is logged out
           });
