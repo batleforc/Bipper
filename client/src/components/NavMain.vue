@@ -2,9 +2,9 @@
 import Burger from "./icon/burger.vue";
 import Bell from "./icon/bell.vue";
 import { useGlobalStore } from "@/stores/Global";
+import { getAssetsUrl } from "@/helper/assetsUrl";
 
 const Global = useGlobalStore();
-
 // Add in profile-container user picture if authentified
 </script>
 <template>
@@ -16,7 +16,8 @@ const Global = useGlobalStore();
       <p>Bipper</p>
     </div>
     <div class="profile-container">
-      <Bell />
+      <Bell v-if="Global.user.picture === ''" />
+      <img class="icon" v-else :src="getAssetsUrl(Global.user.picture)" />
     </div>
   </nav>
   <nav v-if="Global.noInternetMessage" class="nav2">

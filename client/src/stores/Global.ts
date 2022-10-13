@@ -183,13 +183,13 @@ export const useGlobalStore = defineStore({
         })
         .then((res) => res.json())
         .then((data) => {
-          if (data.id !== undefined) this.user.id = data.id;
-          if (data.email !== undefined) this.user.email = data.email;
-          if (data.pseudo !== undefined) this.user.pseudo = data.pseudo;
-          if (data.name !== undefined) this.user.name = data.name;
-          if (data.surname !== undefined) this.user.surname = data.surname;
-          if (data.picture !== undefined) this.user.picture = data.picture;
-          if (data.role !== undefined) this.user.role = data.role;
+          if (data.ID !== undefined) this.user.id = data.ID;
+          if (data.Email !== undefined) this.user.email = data.Email;
+          if (data.Pseudo !== undefined) this.user.pseudo = data.Pseudo;
+          if (data.Name !== undefined) this.user.name = data.Name;
+          if (data.Surname !== undefined) this.user.surname = data.Surname;
+          if (data.Picture !== undefined) this.user.picture = data.Picture;
+          if (data.Role !== undefined) this.user.role = data.Role;
           if (data.Channels !== undefined) this.chan.chan = data.Channels;
           if (data.MyChannels !== undefined) this.chan.myChan = data.MyChannels;
           this.user.loaded = true;

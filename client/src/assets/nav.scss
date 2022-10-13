@@ -2,18 +2,24 @@
   @apply sticky top-0 px-2 py-1 flex items-center justify-between rounded-b;
   background-color: var(--color-dark-blue);
   color: var(--color-light-gray);
+  .icon {
+    @apply p-0 rounded-2xl;
+    width: 24px;
+    height: 24px;
+  }
   .icon-burger {
     fill: var(--color-light-gray);
     width: 24px;
     height: 24px;
   }
   .icon-bell {
+    @apply m-1;
     fill: var(--color-dark-blue);
     width: 24px;
     height: 24px;
   }
   .profile-container {
-    @apply rounded-2xl border-2 p-1 cursor-pointer;
+    @apply rounded-2xl border-2 cursor-pointer;
     background-color: var(--color-light-gray);
     border-color: var(--color-light-blue);
   }
