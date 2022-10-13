@@ -36,12 +36,12 @@ const login = () => {
       <div class="login-title-container">
         <h1>Login</h1>
       </div>
-      <div class="login-form-input-container">
+      <div class="form-auth-input-container">
         <label for="email"> Email : </label>
         <input id="email" type="email" placeholder="Email" v-model="email" />
         <span class="error-text" v-if="mailError !== ''">{{ mailError }}</span>
       </div>
-      <div class="login-form-input-container">
+      <div class="form-auth-input-container">
         <label for="password"> Password : </label>
         <input
           id="password"
@@ -53,10 +53,10 @@ const login = () => {
           passwordError
         }}</span>
       </div>
-      <div class="login-form-input-container">
+      <div class="form-auth-input-container">
         <button @click="login()">Login</button>
       </div>
-      <div class="login-register-container">
+      <div class="form-auth-link-container">
         <p>Don't have an account ?</p>
         <router-link to="/register">Register</router-link>
       </div>

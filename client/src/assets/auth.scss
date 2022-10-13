@@ -1,0 +1,37 @@
+.form-auth-input-container {
+  @apply flex flex-col items-center justify-center;
+  color: var(--color-dark-blue2);
+
+  margin: 0.5rem 0;
+  label {
+    @apply font-bold mt-2;
+  }
+  input {
+    @apply w-80 h-10 rounded-lg border-2 focus:outline-none;
+    border-color: var(--color-dark-blue);
+    :focus {
+      border-color: var(--color-light-blue);
+    }
+    padding: 0 1rem;
+  }
+  button {
+    @apply w-80 h-10 rounded-lg border-2 focus:outline-none;
+    border-color: var(--color-dark-blue);
+    :focus {
+      border-color: var(--color-light-blue);
+    }
+    padding: 0 1rem;
+  }
+  .error-text {
+    @apply text-xs;
+    color: var(--color-light-red);
+  }
+}
+
+.form-auth-link-container {
+  @apply flex flex-col items-center justify-center;
+  color: var(--color-dark-blue2);
+  a {
+    @apply text-blue-500;
+  }
+}
