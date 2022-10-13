@@ -2,8 +2,10 @@
 import { ref } from "vue";
 import { useGlobalStore } from "@/stores/Global";
 import { validateMail, validatePassword } from "@/helper/validateString";
+import { useRoute } from "vue-router";
 
 const Global = useGlobalStore();
+const route = useRoute();
 
 const email = ref("");
 const password = ref("");
@@ -35,6 +37,9 @@ const login = () => {
     <div class="login-container2">
       <div class="login-title-container">
         <h1>Login</h1>
+      </div>
+      <div v-if="route.query.registered !== undefined">
+        <p>You are now registered, please login</p>
       </div>
       <div class="form-auth-input-container">
         <label for="email"> Email : </label>

@@ -1,4 +1,5 @@
-import { Api, type RouteLogoutBody, type RouteRegisterBody } from "@/api/Api";
+import { Api, type RouteRegisterBody } from "@/api/Api";
+import { getQuerryParam, hasQuerryParam } from "@/helper/query";
 import {
   getAccessToken,
   getRefreshToken,
@@ -39,7 +40,7 @@ export const useGlobalStore = defineStore({
           // if not, redirect to login page.
           if (!this.loggedIn) {
             //this.router.push({ name: "login" });
-            next({ name: "login" });
+            next({ name: "login", query: { redirect: to.fullPath } });
           } else {
             next(); // go to wherever I'm going
           }
@@ -77,9 +78,13 @@ export const useGlobalStore = defineStore({
           storeRefreshToken(data.renew_token || "");
           storeAccessToken(data.access_token || "");
           return this.fetchUserInfo().then(() => {
-            console.log("redirecting to home");
+            console.log("redirecting to home or previous path");
             this.loggedIn = true;
-            this.router.push({ name: "home" });
+            if (hasQuerryParam("redirect")) {
+              this.router.push({ path: getQuerryParam("redirect") || "" });
+            } else {
+              this.router.push({ name: "home" });
+            }
           });
         })
         .catch((err) => {
@@ -128,7 +133,7 @@ export const useGlobalStore = defineStore({
       return this.Api.auth
         .registerCreate(registrerBody)
         .then((res) => {
-          this.router.push({ name: "login" });
+          this.router.push({ name: "login", query: { registered: "true" } });
         })
         .catch((err) => {
           // TODO : If error show error to register screen
