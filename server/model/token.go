@@ -68,7 +68,7 @@ func (t *Token) GetOneTokenByToken(db *gorm.DB, token string) error {
 // Get All user's token
 func (t *Token) GetAllToken(db *gorm.DB, id uint) ([]Token, error) {
 	var tokens []Token
-	err := db.Where("user_id = ?", id).Find(&tokens).Error
+	err := db.Where("user_id = ?", id).Order("created_at DESC").Find(&tokens).Error
 	return tokens, err
 }
 

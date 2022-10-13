@@ -66,7 +66,7 @@ func Login(c echo.Context) error {
 	}
 	token.CreateToken(c.Get("db").(*gorm.DB), user.ID, renewToken)
 	return c.JSON(http.StatusOK, LoginReturn{
-		Pseudo:      "JosephJoestar",
+		Pseudo:      user.Pseudo,
 		Role:        model.Member,
 		AccessToken: accessToken,
 		RenewToken:  renewToken,
