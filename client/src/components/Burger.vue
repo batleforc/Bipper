@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { getAssetsUrl } from "@/helper/assetsUrl";
 import { useGlobalStore } from "@/stores/Global";
-
 const Global = useGlobalStore();
+
+defineProps<{
+  doClose: () => void;
+  visible: boolean;
+}>();
 // Make a two way burger workflow
 // If on small screen, show burger menu in the middle
 // If on large screen, show burger menu on the left
@@ -16,8 +21,13 @@ const Global = useGlobalStore();
 </script>
 
 <template>
-  <div class="NavBurger active">
-    <div>
+  <div :class="visible ? 'active' : ''" class="NavBurger">
+    <div class="burger-title">
+      <img
+        v-if="Global.user.picture !== ''"
+        class="icon"
+        :src="getAssetsUrl(Global.user.picture)"
+      />
       <p>Welcome Maxime Leriche</p>
     </div>
     <div>
