@@ -1,12 +1,13 @@
 .form-auth-input-container {
   @apply flex flex-col items-center justify-center mb-1;
-  color: var(--color-dark-blue2);
+  color: var(--color-light-gray);
   label {
     @apply font-bold mt-2;
   }
   input {
     @apply w-80 h-10 rounded-lg border-2 focus:outline-none;
     border-color: var(--color-dark-blue);
+    color: var(--color-dark-blue2);
     :focus {
       border-color: var(--color-light-blue);
     }
@@ -14,7 +15,7 @@
   }
   button {
     @apply w-80 h-10 rounded-lg border-2 focus:outline-none m-2;
-    border-color: var(--color-dark-blue);
+    border-color: var(--color-light-gray);
     :focus {
       border-color: var(--color-light-blue);
     }
@@ -28,7 +29,7 @@
 
 .form-auth-link-container {
   @apply flex flex-col items-center justify-center;
-  color: var(--color-dark-blue2);
+  color: var(--color-light-gray);
   a {
     @apply text-blue-500;
   }

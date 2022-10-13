@@ -5,7 +5,7 @@
   @apply flex flex-col items-center justify-center h-3/5;
   h1 {
     @apply text-3xl font-bold m-2 text-center;
-    color: var(--color-dark-blue2);
+    color: var(--color-light-gray);
   }
 }
 .main-login {
@@ -22,7 +22,7 @@
   @apply flex flex-col items-center justify-center;
   h1 {
     @apply text-3xl font-bold m-2 text-center;
-    color: var(--color-dark-blue2);
+    color: var(--color-light-gray);
   }
 }
 .register-container {
