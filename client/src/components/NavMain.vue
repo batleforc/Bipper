@@ -3,7 +3,7 @@ import Burger from "./icon/burger.vue";
 import Bell from "./icon/bell.vue";
 import { useGlobalStore } from "@/stores/Global";
 import { getAssetsUrl } from "@/helper/assetsUrl";
-
+import MenuBurger from "./Burger.vue";
 const Global = useGlobalStore();
 // Add in profile-container user picture if authentified
 </script>
@@ -23,4 +23,5 @@ const Global = useGlobalStore();
   <nav v-if="Global.noInternetMessage" class="nav2">
     <h1>No Internet connection</h1>
   </nav>
+  <MenuBurger />
 </template>
