@@ -12,3 +12,19 @@
   background-color: var(--color-light-blue);
   @apply h-screen w-screen;
 }
+
+.main-register {
+  background-color: var(--color-light-blue);
+  @apply h-screen w-screen;
+}
+
+.register-container2 {
+  @apply flex flex-col items-center justify-center;
+  h1 {
+    @apply text-3xl font-bold m-2 text-center;
+    color: var(--color-dark-blue2);
+  }
+}
+.register-container {
+  @apply flex flex-col items-center justify-center;
+}
