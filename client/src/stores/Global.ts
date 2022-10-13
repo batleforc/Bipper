@@ -1,5 +1,6 @@
 import { Api, type RouteLogoutBody, type RouteRegisterBody } from "@/api/Api";
 import {
+  getAccessToken,
   getRefreshToken,
   removeAccessToken,
   removeRefreshToken,
@@ -68,13 +69,16 @@ export const useGlobalStore = defineStore({
     login({ email, password }: { email: string; password: string }) {
       return this.Api.auth
         .loginCreate({ email, password })
-        .then(({ data }) => {
+        .then((res) => res.json())
+        .then((data) => {
           if (data.renew_token === null && data.access_token === null) {
             this.router.push({ name: "login" });
           }
           storeRefreshToken(data.renew_token || "");
           storeAccessToken(data.access_token || "");
           return this.fetchUserInfo().then(() => {
+            console.log("redirecting to home");
+            this.loggedIn = true;
             this.router.push({ name: "home" });
           });
         })
@@ -137,12 +141,13 @@ export const useGlobalStore = defineStore({
           .renewCreate({
             renew_token: token,
           })
-          .then((res) => {
-            if (res.data.access_token !== undefined) {
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.access_token !== undefined) {
               this.loggedIn = true;
-              storeAccessToken(res.data.access_token);
+              storeAccessToken(data.access_token);
             }
-            return { status: "success", res };
+            return { status: "success" };
           })
           .catch((err) => {
             removeRefreshToken();
@@ -163,10 +168,11 @@ export const useGlobalStore = defineStore({
       return this.Api.user
         .userList({
           headers: {
-            Authorization: `Bearer ${getRefreshToken()}`,
+            Authorization: `Bearer ${getAccessToken()}`,
           },
         })
-        .then(({ data }) => {
+        .then((res) => res.json())
+        .then((data) => {
           if (data.id !== undefined) this.user.id = data.id;
           if (data.email !== undefined) this.user.email = data.email;
           if (data.pseudo !== undefined) this.user.pseudo = data.pseudo;
@@ -174,6 +180,8 @@ export const useGlobalStore = defineStore({
           if (data.surname !== undefined) this.user.surname = data.surname;
           if (data.picture !== undefined) this.user.picture = data.picture;
           if (data.role !== undefined) this.user.role = data.role;
+          if (data.Channels !== undefined) this.chan.chan = data.Channels;
+          if (data.MyChannels !== undefined) this.chan.myChan = data.MyChannels;
           this.user.loaded = true;
         });
     },

@@ -16,6 +16,8 @@
 .login-form-input-container {
   @apply flex flex-col items-center justify-center;
   color: var(--color-dark-blue2);
+
+  margin: 0.5rem 0;
   label {
     @apply font-bold mt-2;
   }
@@ -26,7 +28,6 @@
       border-color: var(--color-light-blue);
     }
     padding: 0 1rem;
-    margin: 0.5rem 0;
   }
   button {
     @apply w-80 h-10 rounded-lg border-2 focus:outline-none;
@@ -35,7 +36,10 @@
       border-color: var(--color-light-blue);
     }
     padding: 0 1rem;
-    margin: 0.5rem 0;
+  }
+  .error-text {
+    @apply text-xs;
+    color: var(--color-light-red);
   }
 }
 
