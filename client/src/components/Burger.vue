@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { getAssetsUrl } from "@/helper/assetsUrl";
+import { BurgerLink } from "@/model/BurgerLink";
 import { useGlobalStore } from "@/stores/Global";
+import Bell from "./icon/bell.vue";
 const Global = useGlobalStore();
 
 const props = defineProps<{
@@ -38,18 +40,37 @@ window.addEventListener("click", (e) => {
           class="icon"
           :src="getAssetsUrl(Global.user.picture)"
         />
+        <Bell v-else />
         <p v-if="Global.loggedIn">
           {{ Global.user.name }} {{ Global.user.surname }}
         </p>
       </div>
       <div class="burger-cat">
-        <div><p>Home</p></div>
-        <div><p>Mon compte</p></div>
-        <div><p>Mes channel</p></div>
-        <div><p>Mes channel</p></div>
+        <RouterLink
+          v-if="Global.loggedIn"
+          v-for="link in BurgerLink.LoggedIn"
+          :to="link.link"
+          @click="exit"
+        >
+          {{ link.name }}
+        </RouterLink>
+        <RouterLink
+          v-else
+          v-for="link in BurgerLink.LoggedOut"
+          :to="link.link"
+          @click="exit"
+        >
+          {{ link.name }}
+        </RouterLink>
       </div>
       <div class="burger-cat">
-        <div><p>Logout</p></div>
+        <div v-if="Global.loggedIn" @click="Global.logout()"><p>Logout</p></div>
+        <div v-if="!Global.loggedIn">
+          <RouterLink @click="exit" to="/login">Login</RouterLink>
+        </div>
+        <div v-if="!Global.loggedIn">
+          <RouterLink @click="exit" to="/register">Register</RouterLink>
+        </div>
         <div class="burger-credit"><p>Made by batleforc</p></div>
       </div>
     </div>

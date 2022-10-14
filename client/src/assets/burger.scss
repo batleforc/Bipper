@@ -24,6 +24,10 @@
 .burger-title {
   @apply text-lg font-bold m-2 text-center justify-center flex flex-col items-center;
   color: var(--color-light-gray);
+  .icon-bell {
+    @apply m-px;
+    fill: var(--color-light-gray);
+  }
 }
 
 .burger-content {
@@ -36,5 +40,5 @@
 }
 
 .burger-cat {
-  @apply mb-2;
+  @apply mb-2 flex flex-col items-center justify-center;
 }

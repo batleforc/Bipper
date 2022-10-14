@@ -5,7 +5,7 @@
     @apply font-bold mt-2;
   }
   input {
-    @apply w-80 h-10 rounded-lg border-2 focus:outline-none;
+    @apply w-40 md:w-80 h-10 rounded-lg border-2 focus:outline-none;
     border-color: var(--color-dark-blue);
     color: var(--color-dark-blue2);
     :focus {
@@ -14,7 +14,7 @@
     padding: 0 1rem;
   }
   button {
-    @apply w-80 h-10 rounded-lg border-2 focus:outline-none m-2;
+    @apply w-40 md:w-80 h-10 rounded-lg border-2 focus:outline-none m-2;
     border-color: var(--color-light-gray);
     :focus {
       border-color: var(--color-light-blue);
