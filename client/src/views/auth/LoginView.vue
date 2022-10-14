@@ -43,7 +43,13 @@ const login = () => {
       </div>
       <div class="form-auth-input-container">
         <label for="email"> Email : </label>
-        <input id="email" type="email" placeholder="Email" v-model="email" />
+        <input
+          id="email"
+          type="email"
+          placeholder="Email"
+          v-model="email"
+          @keyup.enter="login"
+        />
         <span class="error-text" v-if="mailError !== ''">{{ mailError }}</span>
       </div>
       <div class="form-auth-input-container">
@@ -53,6 +59,7 @@ const login = () => {
           type="password"
           placeholder="Password"
           v-model="password"
+          @keyup.enter="login"
         />
         <span class="error-text" v-if="passwordError !== ''">{{
           passwordError
