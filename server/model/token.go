@@ -81,7 +81,7 @@ func (t *Token) CreateToken(db *gorm.DB, id uint, token string) error {
 
 // Delete Token
 func (t *Token) DeleteToken(db *gorm.DB, id uint) error {
-	return db.Where("user_id = ?", id).Delete(t).Error
+	return db.Where("id = ?", id).Delete(t).Error
 }
 
 func validateToken(token *jwt.Token) (*JwtCustomClaims, error) {

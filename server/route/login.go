@@ -2,7 +2,9 @@ package route
 
 import (
 	"batleforc/bipper/model"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -61,8 +63,18 @@ func Login(c echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Error while creating token")
 	}
+	for _, token := range tokens {
+		if time.Since(token.CreatedAt) > time.Hour*24*7 {
+			token.DeleteToken(c.Get("db").(*gorm.DB), token.ID)
+		}
+	}
+	tokens, err = token.GetAllToken(c.Get("db").(*gorm.DB), user.ID)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Error while creating token")
+	}
 	if len(tokens) >= 4 {
-		token.DeleteToken(c.Get("db").(*gorm.DB), tokens[len(tokens)-1].ID)
+		fmt.Println(tokens[len(tokens)-1].ID)
+		//token.DeleteToken(c.Get("db").(*gorm.DB), tokens[len(tokens)-1].ID)
 	}
 	token.CreateToken(c.Get("db").(*gorm.DB), user.ID, renewToken)
 	return c.JSON(http.StatusOK, LoginReturn{
