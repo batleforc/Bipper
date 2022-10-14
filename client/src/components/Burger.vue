@@ -3,38 +3,55 @@ import { getAssetsUrl } from "@/helper/assetsUrl";
 import { useGlobalStore } from "@/stores/Global";
 const Global = useGlobalStore();
 
-defineProps<{
+const props = defineProps<{
   doClose: () => void;
   visible: boolean;
 }>();
-// Make a two way burger workflow
-// If on small screen, show burger menu in the middle
-// If on large screen, show burger menu on the left
 
-// LARGE on active:
-// container :top-0 right-0 flex
+const exit = () => {
+  props.doClose();
+};
 
-// SMALL on active:
-// container : rounded-b-lg flex justify-center mx-2 (smaller thatn nav)
-
-// test
+window.addEventListener("keydown", (e) => {
+  if (props.visible && e.key === "Escape") {
+    exit();
+  }
+});
+window.addEventListener("click", (e) => {
+  if (
+    props.visible &&
+    e.target !== null &&
+    !document.getElementById("nav")?.contains(e.target as Node) &&
+    !document.getElementById("burger")?.contains(e.target as Node)
+  ) {
+    exit();
+  }
+});
 </script>
 
 <template>
-  <div :class="visible ? 'active' : ''" class="NavBurger">
-    <div class="burger-title">
-      <img
-        v-if="Global.user.picture !== ''"
-        class="icon"
-        :src="getAssetsUrl(Global.user.picture)"
-      />
-      <p>Welcome Maxime Leriche</p>
-    </div>
-    <div>
-      <div><p>Home</p></div>
-      <div><p>Mon compte</p></div>
-      <div><p>Mes channel</p></div>
-      <div><p>Mes channel</p></div>
+  <div id="burger" :class="visible ? 'active' : ''" class="NavBurger">
+    <div class="burger-content">
+      <div class="burger-cat burger-title">
+        <img
+          v-if="Global.user.picture !== ''"
+          class="icon"
+          :src="getAssetsUrl(Global.user.picture)"
+        />
+        <p v-if="Global.loggedIn">
+          {{ Global.user.name }} {{ Global.user.surname }}
+        </p>
+      </div>
+      <div class="burger-cat">
+        <div><p>Home</p></div>
+        <div><p>Mon compte</p></div>
+        <div><p>Mes channel</p></div>
+        <div><p>Mes channel</p></div>
+      </div>
+      <div class="burger-cat">
+        <div><p>Logout</p></div>
+        <div class="burger-credit"><p>Made by batleforc</p></div>
+      </div>
     </div>
   </div>
 </template>

@@ -5,7 +5,7 @@
 }
 
 .NavBurger.active {
-  @apply flex flex-col items-center justify-center text-center rounded-b-2xl -mt-1 p-1 mx-2 border-x-2 border-b-2;
+  @apply flex flex-col items-center justify-center text-center rounded-b-2xl -mt-1 p-1 mx-2 border-x-2 border-b-2 md:rounded-none md:left-0 md:top-0 md:fixed md:m-0 md:border-l-0 md:border-t-2 md:h-full;
   background-color: var(--color-dark-blue);
   border-color: var(--color-light-red);
   color: var(--color-light-gray);
@@ -24,4 +24,17 @@
 .burger-title {
   @apply text-lg font-bold m-2 text-center justify-center flex flex-col items-center;
   color: var(--color-light-gray);
+}
+
+.burger-content {
+  @apply md:flex md:flex-col md:justify-between md:h-full;
+}
+
+.burger-credit {
+  @apply text-center text-xs;
+  color: var(--color-light-gray);
+}
+
+.burger-cat {
+  @apply mb-2;
 }

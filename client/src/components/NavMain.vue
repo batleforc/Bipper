@@ -11,7 +11,7 @@ const seeBurger = ref(false);
 // Add in profile-container user picture if authentified
 </script>
 <template>
-  <nav class="nav">
+  <nav id="nav" class="nav">
     <div class="burger-container" @click="seeBurger = !seeBurger">
       <Burger />
     </div>
