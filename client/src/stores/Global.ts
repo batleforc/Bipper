@@ -35,6 +35,7 @@ export const useGlobalStore = defineStore({
   actions: {
     init() {
       this.inited = true;
+      var pathname = window.location.pathname;
       this.router.beforeEach((to, from, next) => {
         if (to.matched.some((record) => record.meta.requiresAuth)) {
           // this route requires auth, check if logged in
@@ -59,11 +60,17 @@ export const useGlobalStore = defineStore({
         this.Api.baseUrl = import.meta.env.VITE_API;
       if (getRefreshToken() != null) {
         this.renewToken().then((res) => {
-          if (res) {
-            console.log(res);
-          }
           this.fetchUserInfo().then(() => {
-            this.router.push({ name: "home" });
+            this.loggedIn = true;
+            if (hasQuerryParam("redirect") || pathname !== "/") {
+              this.router.push({
+                path: hasQuerryParam("redirect")
+                  ? getQuerryParam("redirect") || pathname
+                  : pathname,
+              });
+            } else {
+              this.router.push({ name: "home" });
+            }
           });
         });
       }

@@ -66,7 +66,7 @@ func (c *Channel) GetPublicChannels(db *gorm.DB, limit, page int) (*[]Channel, e
 // Get All public channels search
 func (c *Channel) GetPublicChannelsSearch(db *gorm.DB, limit, page int, search string) (*[]Channel, error) {
 	var channels []Channel
-	err := db.Model(&Channel{}).Preload("Users").Preload("Messages").Offset((page-1)*limit).Limit(limit).Where("private = ? AND name LIKE ?", false, "%"+search+"%").Find(&channels).Error
+	err := db.Model(&Channel{}).Preload("Users").Preload("Messages").Order("created_at ASC").Offset((page-1)*limit).Limit(limit).Where("private = ? AND name LIKE ?", false, "%"+search+"%").Find(&channels).Error
 	return &channels, err
 }
 
