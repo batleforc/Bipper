@@ -6,7 +6,7 @@ const Global = useGlobalStore();
 </script>
 
 <template>
-  <div>
+  <div class="profile-container">
     <div>
       <img
         v-if="Global.user.picture !== ''"
@@ -14,12 +14,12 @@ const Global = useGlobalStore();
         :src="getAssetsUrl(Global.user.picture)"
       />
     </div>
-    <div>Role</div>
+    <div class="role-pile">Role : {{ Global.user.role }}</div>
     <div>
-      <div>Email</div>
-      <div>Username</div>
-      <div>Name</div>
-      <div>Surname</div>
+      <div>Email : {{ Global.user.email }}</div>
+      <div>Pseudo : {{ Global.user.pseudo }}</div>
+      <div>Name : {{ Global.user.name }}</div>
+      <div>Surname : {{ Global.user.surname }}</div>
     </div>
   </div>
 </template>

@@ -1,0 +1,9 @@
+.profile-container {
+  @apply flex flex-col items-center justify-center;
+}
+
+.role-pile {
+  @apply border-2 rounded-xl p-1 text-xs text-center m-1;
+  border-color: var(--color-light-red);
+  background-color: var(--color-light-gray);
+}
