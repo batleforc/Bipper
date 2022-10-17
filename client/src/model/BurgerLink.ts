@@ -13,8 +13,12 @@ export const BurgerLink = {
       link: "/channels",
     },
     {
-      name: "Join Channels",
-      link: "/join-channels",
+      name: "Explore Channels",
+      link: "/channels/explore",
+    },
+    {
+      name: "Create Channels",
+      link: "/channels/create",
     },
   ],
   LoggedOut: [
@@ -22,9 +26,9 @@ export const BurgerLink = {
       name: "Home",
       link: "/",
     },
-    {
-      name: "About",
-      link: "/about",
-    },
+    //{
+    //  name: "About",
+    //  link: "/about",
+    //},
   ],
 };

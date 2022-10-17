@@ -8,7 +8,6 @@ import { ref } from "vue";
 const Global = useGlobalStore();
 
 const seeBurger = ref(false);
-// Add in profile-container user picture if authentified
 </script>
 <template>
   <nav id="nav" class="nav">
@@ -16,7 +15,8 @@ const seeBurger = ref(false);
       <Burger />
     </div>
     <div>
-      <p>Bipper</p>
+      <RouterLink v-if="Global.loggedIn" to="/app">Bipper</RouterLink>
+      <RouterLink v-else to="/">Bipper</RouterLink>
     </div>
     <div class="profile-container">
       <Bell v-if="Global.user.picture === '' || seeBurger" />

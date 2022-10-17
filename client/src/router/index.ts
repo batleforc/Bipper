@@ -46,6 +46,30 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
+    {
+      path: "/channels/explore",
+      name: "channels",
+      component: () => import("../views/ChannelsView.vue"),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: "/channels",
+      name: "my-channels",
+      component: () => import("../views/MyChannelsView.vue"),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: "/channels/create",
+      name: "create-channel",
+      component: () => import("../views/CreateChannelsView.vue"),
+      meta: {
+        requiresAuth: true,
+      },
+    },
   ],
 });
 
