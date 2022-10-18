@@ -71,6 +71,19 @@ func CreateChan(c echo.Context) error {
 			Message: "Error while creating channel",
 		})
 	}
+	chanUser := model.ChannelUser{
+		ChannelID: channel.ID,
+		UserID:    c.Get("User").(*model.User).ID,
+		CanSend:   true,
+		CanRead:   true,
+		CanMod:    true,
+	}
+	if err := chanUser.CreateChannelUser(c.Get("db").(*gorm.DB)); err != nil {
+		return c.JSON(500, JoinChanReturn{
+			Error:   true,
+			Message: "Error while creating channel user",
+		})
+	}
 	return c.JSON(200, CreateChanReturn{
 		Created: true,
 		Error:   false,

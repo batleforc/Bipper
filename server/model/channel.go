@@ -78,7 +78,6 @@ func (c *Channel) DeleteChannel(db *gorm.DB, id uint) error {
 
 // Create one Channel
 func (c *Channel) CreateChannel(db *gorm.DB) error {
-	c.GeneratePassKey()
 	err := db.Create(c).Error
 	return err
 }
